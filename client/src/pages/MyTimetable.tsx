@@ -171,6 +171,7 @@ export default function MyTimetable() {
                   )}
                 </div>
               )}
+            </div>
             </CardContent>
           </Card>
         )}

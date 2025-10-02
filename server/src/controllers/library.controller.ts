@@ -346,43 +346,42 @@ export const returnBook = async (req: Request, res: Response) => {
       WHERE id = ${issue[0].bookId}
     `);
 
+    // Send SMS notification if there's a fine
+    if (fineAmount && fineAmount > 0) {
+      try {
+        const [user] = await db
+          .select({
+            name: users.name,
+            phone: users.phone,
+          })
+          .from(users)
+          .where(eq(users.id, issue[0].studentId));
+
+        const [book] = await db
+          .select({
+            title: books.title,
+          })
+          .from(books)
+          .where(eq(books.id, issue[0].bookId));
+
+        if (user?.phone && book) {
+          await sendLibraryOverdueSms(
+            user.phone,
+            user.name,
+            book.title,
+            new Date(issue[0].dueDate).toLocaleDateString(),
+            fineAmount
+          );
+        }
+      } catch (smsError) {
+        console.error('Error sending library overdue SMS:', smsError);
+      }
+    }
+
     res.json({
       success: true,
       message: 'Book returned successfully',
-   
-       // Send SMS notification if there's a fine
-       if (fineAmount && fineAmount > 0) {
-         try {
-           const [user] = await db
-             .select({
-               name: users.name,
-               phone: users.phone,
-             })
-             .from(users)
-             .where(eq(users.id, issue[0].studentId));
-
-           const [book] = await db
-             .select({
-               title: books.title,
-             })
-             .from(books)
-             .where(eq(books.id, issue[0].bookId));
-
-           if (user?.phone && book) {
-             await sendLibraryOverdueSms(
-               user.phone,
-               user.name,
-               book.title,
-               new Date(issue[0].dueDate).toLocaleDateString(),
-               fineAmount
-             );
-           }
-         } catch (smsError) {
-           console.error('Error sending library overdue SMS:', smsError);
-         }
-       }
-   
-       res.json({
+    });
   } catch (error) {
     console.error('Return book error:', error);
     res.status(500).json({

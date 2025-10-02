@@ -4,7 +4,7 @@
   "description": "Comprehensive Education Management System",
   "type": "module",
   "scripts": {
-    "dev": "concurrently &quot;npm run dev:server&quot; &quot;npm run dev:client&quot;",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "tsx watch server/src/index.ts",
     "dev:client": "vite",
     "build": "npm run build:client && npm run build:server",
@@ -34,6 +34,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@tanstack/react-query": "^5.17.19",
     "@tanstack/react-table": "^8.11.6",
+    "axios": "^1.12.2",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

@@ -13,21 +13,6 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-export const announcements = pgTable('announcements', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  title: varchar('title', { length: 255 }).notNull(),
-  content: text('content').notNull(),
-  targetRole: varchar('target_role', { length: 50 }), // all, student, teacher, guardian, etc.
-  priority: varchar('priority', { length: 20 }).default('normal').notNull(), // low, normal, high, urgent
-  publishDate: timestamp('publish_date').defaultNow().notNull(),
-  expiryDate: timestamp('expiry_date'),
-  attachmentUrl: text('attachment_url'),
-  createdBy: uuid('created_by').references(() => users.id).notNull(),
-  isActive: boolean('is_active').default(true).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
 export const messages = pgTable('messages', {
   id: uuid('id').defaultRandom().primaryKey(),
   senderId: uuid('sender_id').references(() => users.id).notNull(),
@@ -41,5 +26,4 @@ export const messages = pgTable('messages', {
 });
 
 export type Notification = typeof notifications.$inferSelect;
-export type Announcement = typeof announcements.$inferSelect;
 export type Message = typeof messages.$inferSelect;

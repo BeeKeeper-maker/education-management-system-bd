@@ -7,9 +7,9 @@ import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
-import { useToast } from '../components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Plus, Calendar, Edit, Eye, FileText, CheckCircle } from 'lucide-react';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 
 interface ExamType {
   id: string;
@@ -41,7 +41,7 @@ interface AcademicSession {
 
 export default function ExamManagement() {
   const { toast } = useToast();
-  const [, navigate] = useNavigate();
+  const [, navigate] = useLocation();
   const [exams, setExams] = useState<Exam[]>([]);
   const [examTypes, setExamTypes] = useState<ExamType[]>([]);
   const [sessions, setSessions] = useState<AcademicSession[]>([]);

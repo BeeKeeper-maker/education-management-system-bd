@@ -5,8 +5,9 @@ export * from './academic';
 export * from './students';
 export * from './attendance';
 export * from './timetable';
-export * from './notifications';
+// export * from './notifications'; // Commented out due to duplicate exports with communication
 export * from './examinations';
 export * from './financial';
 export * from './hostel';
-export * from './library';export * from './communication';
+export * from './library';
+export * from './communication';

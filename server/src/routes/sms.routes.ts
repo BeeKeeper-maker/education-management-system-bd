@@ -6,7 +6,7 @@ import {
   getSmsStats,
 } from '../controllers/sms.controller';
 import { authenticate } from '../middleware/auth';
-import { authorize } from '../middleware/authorize';
+import { authorize } from '../middleware/auth';
 
 const router = Router();
 

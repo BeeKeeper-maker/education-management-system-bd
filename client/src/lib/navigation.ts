@@ -17,7 +17,7 @@ import {
   Receipt,
   TrendingUp,
   Wallet,
-     Megaphone,
+  Megaphone,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -99,43 +99,36 @@ export const navigationItems: NavigationItem[] = [
     name: 'Exams & Results',
     href: '/exams',
     icon: BookMarked,
-     },
-     {
-       name: 'Notice Board',
-       href: '/notice-board',
-       icon: Megaphone,
-       roles: ['superadmin', 'admin'],
-     },
-     {
-       name: 'Financial Dashboard',
-       href: '/notice-board',
-       icon: Bell,
-       roles: ['superadmin', 'admin'],
-     },
-     {
-       name: 'Financial Dashboard',
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Notice Board',
+    href: '/notice-board',
+    icon: Megaphone,
+    roles: ['superadmin', 'admin'],
+  },
+  {
     name: 'Financial Dashboard',
-     },
-     {
-       name: 'Fee Collection',
-       href: '/fees/collection',
-       icon: Receipt,
-       roles: ['superadmin', 'admin', 'accountant'],
-     },
-     {
-       name: 'My Fees',
-       href: '/fees/my-fees',
-       icon: Wallet,
-     Megaphone,
-       roles: ['student', 'guardian'],
-     },
-     {
-       name: 'Expense Management',
-       href: '/expenses',
-       icon: DollarSign,
-       roles: ['superadmin', 'admin', 'accountant'],
     href: '/financial/dashboard',
     icon: TrendingUp,
+    roles: ['superadmin', 'admin', 'accountant'],
+  },
+  {
+    name: 'Fee Collection',
+    href: '/fees/collection',
+    icon: Receipt,
+    roles: ['superadmin', 'admin', 'accountant'],
+  },
+  {
+    name: 'My Fees',
+    href: '/fees/my-fees',
+    icon: Wallet,
+    roles: ['student', 'guardian'],
+  },
+  {
+    name: 'Expense Management',
+    href: '/expenses',
+    icon: DollarSign,
     roles: ['superadmin', 'admin', 'accountant'],
   },
   {
@@ -144,24 +137,24 @@ export const navigationItems: NavigationItem[] = [
     icon: Hotel,
     roles: ['superadmin', 'admin', 'hostel_manager'],
   },
-     },
-     {
-       name: 'Room Allocation',
-       href: '/hostel/allocation',
-       icon: Hotel,
-       roles: ['superadmin', 'admin', 'hostel_manager'],
-     },
-     {
-       name: 'Book Management',
-       href: '/library/books',
-       icon: BookMarked,
-       roles: ['superadmin', 'admin'],
-     },
-     {
-       name: 'Issue/Return Books',
-       href: '/library/issue-return',
-       icon: BookMarked,
-       roles: ['superadmin', 'admin'],
+  {
+    name: 'Room Allocation',
+    href: '/hostel/allocation',
+    icon: Hotel,
+    roles: ['superadmin', 'admin', 'hostel_manager'],
+  },
+  {
+    name: 'Book Management',
+    href: '/library/books',
+    icon: BookMarked,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Issue/Return Books',
+    href: '/library/issue-return',
+    icon: BookMarked,
+    roles: ['superadmin', 'admin'],
+  },
   {
     name: 'Institution Settings',
     href: '/institution',

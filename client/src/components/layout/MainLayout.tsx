@@ -18,7 +18,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       </aside>
 
       {/* Sidebar - Mobile */}
-      {isMobileMenuOpen &amp;&amp; (
+      {isMobileMenuOpen && (
         <>
           <div 
             className="fixed inset-0 bg-black/50 z-40 md:hidden"
