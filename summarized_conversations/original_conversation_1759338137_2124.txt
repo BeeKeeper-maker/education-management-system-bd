@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me try with docker compose (without hyphen):\n\n<function_calls>\n<execute-command>\ndocker compose -f docker-compose.dev.yml up -d\n</execute-command>\n</function_calls>'}

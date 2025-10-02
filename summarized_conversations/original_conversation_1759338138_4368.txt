@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'PostgreSQL is not installed. Let me install it:\n\n<function_calls>\n<execute-command>\nsudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib\n</execute-command>\n</function_calls>'}

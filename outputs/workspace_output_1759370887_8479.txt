@@ -1,0 +1,11 @@
+      .where(eq(studentFees.id, studentFeeId));
+
+    res.status(201).json({
+      success: true,
+      message: 'Payment collected successfully',
+      data: {
+        payment,
+        receiptNumber,
+      },
+    });
+  } catch (error) {

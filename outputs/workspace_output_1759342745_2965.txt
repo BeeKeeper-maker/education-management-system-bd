@@ -1,0 +1,2 @@
+7:import { getNavigationForRole } from '@/lib/navigation';
+21:  const navigation = user ? getNavigationForRole(user.role) : [];

@@ -1,0 +1,50 @@
+import { Request, Response } from 'express';
+import { db } from '../db';
+import { attendance, classAttendance, students, enrollments, users } from '../db/schema';
+import { eq, and, gte, lte, desc, sql } from 'drizzle-orm';
+
+// Mark attendance for a class
+export const markAttendance = async (req: Request, res: Response) => {
+  try {
+    const { classId, sectionId, date, attendanceRecords } = req.body;
+    const markedBy = req.user!.id;
+
+    // Validate required fields
+    if (!classId || !sectionId || !date || !attendanceRecords || !Array.isArray(attendanceRecords)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Missing required fields' 
+      });
+    }
+
+    // Check if attendance already exists for this date
+    const existingAttendance = await db
+      .select()
+      .from(classAttendance)
+      .where(
+        and(
+          eq(classAttendance.classId, classId),
+          eq(classAttendance.sectionId, sectionId),
+          eq(classAttendance.date, date)
+        )
+      );
+
+    if (existingAttendance.length > 0 && existingAttendance[0].isFinalized) {
+      return res.status(400).json({
+        success: false,
+        message: 'Attendance for this date is already finalized'
+      });
+    }
+
+    // Delete existing attendance records for this date if updating
+    if (existingAttendance.length > 0) {
+      await db
+        .delete(attendance)
+        .where(
+          and(
+            eq(attendance.classId, classId),
+            eq(attendance.sectionId, sectionId),
+            eq(attendance.date, date)
+          )
+        );
+    }

@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   {\\\\n     \\\\"success\\\\": true,\\\\n     \\\\"message\\\\": \\\\"Server is running\\\\",\\\\n     \\\\"timestamp\\\\": \\\\"2025-10-01T16:13:37.674Z\\\\"\\\\n   }\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

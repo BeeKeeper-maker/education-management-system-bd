@@ -1,0 +1,14 @@
+  {
+    name: 'Attendance',
+    href: '/attendance',
+    icon: CheckSquare,
+    roles: ['superadmin', 'admin', 'teacher'],
+  },
+  {
+    name: 'Timetable',
+    href: '/timetable',
+    icon: Calendar,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Assignments',

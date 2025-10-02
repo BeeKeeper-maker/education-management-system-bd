@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ntmux new-session -d -s dev "cd /workspace && npm run dev" && sleep 5 && tmux capture-pane -pt dev\n</execute-command>\n</function_calls>'}

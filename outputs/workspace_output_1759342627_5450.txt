@@ -1,0 +1,3 @@
+import MarksEntry from './pages/MarksEntry';
+
+// Create a client

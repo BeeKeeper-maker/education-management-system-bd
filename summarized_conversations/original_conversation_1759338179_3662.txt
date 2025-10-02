@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me check if port 5173 is already in use:\n\n<function_calls>\n<execute-command>\nlsof -i :5173\n</execute-command>\n</function_calls>'}

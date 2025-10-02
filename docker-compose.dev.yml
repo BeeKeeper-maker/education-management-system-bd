@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Development
+  postgres:
+    image: postgres:14-alpine
+    container_name: edupro_postgres_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: edupro
+      POSTGRES_PASSWORD: edupro123
+      POSTGRES_DB: edupro
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edupro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

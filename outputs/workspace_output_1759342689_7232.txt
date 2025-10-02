@@ -1,0 +1,1 @@
+177:      <Route path="/exams/marks/:examSubjectId">

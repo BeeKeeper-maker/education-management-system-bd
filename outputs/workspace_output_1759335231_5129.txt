@@ -1,0 +1,90 @@
+Testing Users API...
+
+1. Logging in as SuperAdmin...
+Token obtained: eyJhbGciOiJIUzI1NiIs...
+
+2. Fetching all users...
+{
+  "success": true,
+  "data": {
+    "users": [
+      {
+        "id": "30e3ac70-30a5-4bfc-89b3-64b6894db669",
+        "email": "guardian@edupro.com",
+        "firstName": "Robert",
+        "lastName": "Guardian",
+        "role": "guardian",
+        "phone": "+1234567895",
+        "isActive": true,
+        "createdAt": "2025-10-01T15:32:50.007Z"
+      },
+      {
+        "id": "daca7f2a-b066-4495-9aa3-3576419e0de5",
+        "email": "student@edupro.com",
+        "firstName": "Jane",
+        "lastName": "Student",
+        "role": "student",
+        "phone": "+1234567894",
+        "isActive": true,
+        "createdAt": "2025-10-01T15:32:50.004Z"
+      },
+      {
+        "id": "c28881b4-9d84-4cd1-a899-0755c2f711ee",
+        "email": "teacher@edupro.com",
+        "firstName": "John",
+        "lastName": "Teacher",
+        "role": "teacher",
+        "phone": "+1234567893",
+        "isActive": true,
+        "createdAt": "2025-10-01T15:32:50.001Z"
+      },
+      {
+        "id": "dd44384c-0366-4481-8058-3ad6f547b411",
+        "email": "admin@edupro.com",
+        "firstName": "Admin",
+        "lastName": "User",
+        "role": "admin",
+        "phone": "+1234567892",
+        "isActive": true,
+        "createdAt": "2025-10-01T15:32:49.996Z"
+      },
+      {
+        "id": "69357b0f-8b70-4227-9cb5-91fc1f5990e6",
+        "email": "superadmin@edupro.com",
+        "firstName": "Super",
+        "lastName": "Admin",
+        "role": "superadmin",
+        "phone": "+1234567891",
+        "isActive": true,
+        "createdAt": "2025-10-01T15:32:49.992Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 5,
+      "totalPages": 1
+    }
+  }
+}
+
+3. Fetching user statistics...
+{
+  "success": true,
+  "data": {
+    "total": 5,
+    "active": 5,
+    "inactive": 0,
+    "byRole": {
+      "superadmin": 1,
+      "admin": 1,
+      "teacher": 1,
+      "student": 1,
+      "guardian": 1,
+      "accountant": 0,
+      "hostel_manager": 0
+    }
+  }
+}
+
+Done!

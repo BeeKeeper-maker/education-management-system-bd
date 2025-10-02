@@ -1,0 +1,122 @@
+import { UserRole } from '@/types';
+import {
+  LayoutDashboard,
+  Users,
+  GraduationCap,
+  BookOpen,
+  Calendar,
+  CheckSquare,
+  Bell,
+  Settings,
+  Building2,
+  DollarSign,
+  Hotel,
+  BookMarked,
+  UserCog,
+  ClipboardList,
+} from 'lucide-react';
+
+export interface NavigationItem {
+  name: string;
+  href: string;
+  icon: any;
+  roles: UserRole[];
+  badge?: string;
+}
+
+export const navigationItems: NavigationItem[] = [
+  {
+    name: 'Dashboard',
+    href: '/dashboard',
+    icon: LayoutDashboard,
+    roles: ['superadmin', 'admin', 'teacher', 'student', 'guardian', 'accountant', 'hostel_manager'],
+  },
+  {
+    name: 'User Management',
+    href: '/users',
+    icon: UserCog,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Students',
+    href: '/students',
+    icon: Users,
+    roles: ['superadmin', 'admin', 'teacher'],
+  },
+  {
+    name: 'Student Admission',
+    href: '/students/admission',
+    icon: UserCog,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Teachers',
+    href: '/teachers',
+    icon: GraduationCap,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Classes',
+    href: '/classes',
+    icon: BookOpen,
+    roles: ['superadmin', 'admin', 'teacher'],
+  },
+  {
+    name: 'Attendance',
+    href: '/attendance',
+    icon: CheckSquare,
+    roles: ['superadmin', 'admin', 'teacher'],
+  },
+  {
+    name: 'Timetable',
+    href: '/timetable',
+    icon: Calendar,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Assignments',
+    href: '/assignments',
+    icon: ClipboardList,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Exams & Results',
+    href: '/exams',
+    icon: BookMarked,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Fees & Payments',
+    href: '/fees',
+    icon: DollarSign,
+    roles: ['superadmin', 'admin', 'accountant', 'student', 'guardian'],
+  },
+  {
+    name: 'Hostel',
+    href: '/hostel',
+    icon: Hotel,
+    roles: ['superadmin', 'admin', 'hostel_manager', 'student'],
+  },
+  {
+    name: 'Institution Settings',
+    href: '/institution',
+    icon: Building2,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Notifications',
+    href: '/notifications',
+    icon: Bell,
+    roles: ['superadmin', 'admin', 'teacher', 'student', 'guardian', 'accountant', 'hostel_manager'],
+  },
+  {
+    name: 'Settings',
+    href: '/settings',
+    icon: Settings,
+    roles: ['superadmin', 'admin', 'teacher', 'student', 'guardian', 'accountant', 'hostel_manager'],
+  },
+];
+
+export function getNavigationForRole(role: UserRole): NavigationItem[] {
+  return navigationItems.filter((item) => item.roles.includes(role));
+}

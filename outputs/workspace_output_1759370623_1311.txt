@@ -1,0 +1,48 @@
+    // Insert new attendance records
+    const attendanceData = attendanceRecords.map((record: any) => ({
+      studentId: record.studentId,
+      classId,
+      sectionId,
+      date,
+      status: record.status || 'present',
+      remarks: record.remarks || null,
+      markedBy,
+    }));
+
+    await db.insert(attendance).values(attendanceData);
+
+    // Calculate statistics
+    const presentCount = attendanceRecords.filter((r: any) => r.status === 'present').length;
+    const absentCount = attendanceRecords.filter((r: any) => r.status === 'absent').length;
+    const lateCount = attendanceRecords.filter((r: any) => r.status === 'late').length;
+    const excusedCount = attendanceRecords.filter((r: any) => r.status === 'excused').length;
+
+    // Update or create class attendance summary
+    if (existingAttendance.length > 0) {
+      await db
+        .update(classAttendance)
+        .set({
+          totalStudents: attendanceRecords.length,
+          presentCount,
+          absentCount,
+          lateCount,
+          excusedCount,
+          markedBy,
+          updatedAt: new Date(),
+        })
+        .where(eq(classAttendance.id, existingAttendance[0].id));
+    } else {
+      await db.insert(classAttendance).values({
+        classId,
+        sectionId,
+        date,
+        totalStudents: attendanceRecords.length,
+        presentCount,
+        absentCount,
+        lateCount,
+        excusedCount,
+        markedBy,
+        isFinalized: false,
+      });
+    }
+

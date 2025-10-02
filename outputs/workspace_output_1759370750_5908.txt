@@ -1,0 +1,1 @@
+248:export const collectFeePayment = async (req: Request, res: Response) => {

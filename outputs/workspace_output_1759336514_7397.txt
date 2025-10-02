@@ -1,0 +1,6 @@
+
+> edupro@1.0.0 dev:server
+> tsx watch server/src/index.ts
+
+4:35:32 PM [tsx] Return key Rerunning...
+c

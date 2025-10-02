@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': "<function_calls>\n<execute-command>\nsed -n '64,77p' client/src/lib/navigation.ts\n</execute-command>\n</function_calls>"}

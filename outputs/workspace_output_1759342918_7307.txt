@@ -1,0 +1,11 @@
+root         130  0.0  0.0 1115056 60644 pts/0   Sl   17:01   0:00 /usr/lib/code-server/lib/node /usr/lib/code-server --trusted-origins=* --bind-addr 127.0.0.1:4000 --auth none --user-data-dir /opt/code-server --extensions-dir /opt/code-server/extensions
+root         186  0.0  0.0 1050424 62156 pts/0   Sl   17:01   0:00 /usr/lib/code-server/lib/node /usr/lib/code-server/out/node/entry
+root         199  0.0  0.0 1125108 69232 pts/0   Sl   17:01   0:04 /usr/local/lib/python3.11/site-packages/playwright/driver/node /usr/local/lib/python3.11/site-packages/playwright/driver/package/cli.js run-driver
+root        1419  0.0  0.0 1036428 63872 pts/0   Sl+  17:16   0:00 node /workspace/node_modules/.bin/tsx watch server/src/index.ts
+root        1551  0.0  0.0   2584  1576 pts/0    S+   17:18   0:00 sh -c vite
+root        1552  0.0  0.0 11849060 100152 pts/0 Sl+  17:18   0:06 node /workspace/node_modules/.bin/vite
+root        1563  0.0  0.0 727796 26512 pts/0    Sl+  17:18   0:02 /workspace/node_modules/vite/node_modules/@esbuild/linux-x64/bin/esbuild --service=0.21.5 --ping
+root        2476  0.0  0.0 43844636 79964 pts/0  Sl+  17:53   0:00 /usr/bin/node --require /workspace/node_modules/tsx/dist/preflight.cjs --import file:///workspace/node_modules/tsx/dist/loader.mjs server/src/index.ts
+root        2488  0.0  0.0 1238000 11908 pts/0   Sl+  17:53   0:01 /workspace/node_modules/tsx/node_modules/@esbuild/linux-x64/bin/esbuild --service=0.25.10 --ping
+root        2543  0.0  0.0   2584  1300 pts/0    S+   17:53   0:00 sh -c tsx watch server/src/index.ts
+root        2544  0.0  0.0 1024548 51540 pts/0   Sl+  17:53   0:00 node /workspace/node_modules/.bin/tsx watch server/src/index.ts

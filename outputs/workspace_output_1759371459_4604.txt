@@ -1,0 +1,50 @@
+import { UserRole } from '@/types';
+import {
+  LayoutDashboard,
+  Users,
+  GraduationCap,
+  BookOpen,
+  Calendar,
+  CheckSquare,
+  Bell,
+  Settings,
+  Building2,
+  DollarSign,
+  Hotel,
+  BookMarked,
+  UserCog,
+  ClipboardList,
+  Receipt,
+  TrendingUp,
+  Wallet,
+} from 'lucide-react';
+
+export interface NavigationItem {
+  name: string;
+  href: string;
+  icon: any;
+  roles: UserRole[];
+  badge?: string;
+}
+
+export const navigationItems: NavigationItem[] = [
+  {
+    name: 'Dashboard',
+    href: '/dashboard',
+    icon: LayoutDashboard,
+    roles: ['superadmin', 'admin', 'teacher', 'student', 'guardian', 'accountant', 'hostel_manager'],
+  },
+  {
+    name: 'User Management',
+    href: '/users',
+    icon: UserCog,
+    roles: ['superadmin', 'admin'],
+  },
+  {
+    name: 'Students',
+    href: '/students',
+    icon: Users,
+    roles: ['superadmin', 'admin', 'teacher'],
+  },
+  {
+    name: 'Student Admission',

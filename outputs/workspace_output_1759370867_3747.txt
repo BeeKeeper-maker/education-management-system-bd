@@ -1,0 +1,103 @@
+    });
+  }
+};
+
+// Collect fee payment
+export const collectFeePayment = async (req: Request, res: Response) => {
+  try {
+    const {
+      studentFeeId,
+      studentId,
+      amount,
+      paymentDate,
+      paymentMethod,
+      transactionId,
+      remarks,
+    } = req.body;
+
+    const collectedBy = req.user!.id;
+
+    // Validate required fields
+    if (!studentFeeId || !studentId || !amount || !paymentDate || !paymentMethod) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields',
+      });
+    }
+
+    // Get student fee details
+    const [studentFee] = await db
+      .select()
+      .from(studentFees)
+      .where(eq(studentFees.id, studentFeeId));
+
+    if (!studentFee) {
+      return res.status(404).json({
+        success: false,
+        message: 'Student fee not found',
+      });
+    }
+
+    const dueAmount = parseFloat(studentFee.dueAmount);
+    const paymentAmount = parseFloat(amount);
+
+    if (paymentAmount > dueAmount) {
+      return res.status(400).json({
+        success: false,
+        message: 'Payment amount exceeds due amount',
+      });
+    }
+
+    // Generate receipt number
+    const receiptNumber = `RCP${Date.now()}`;
+
+    // Create payment record
+    const [payment] = await db
+      .insert(feePayments)
+      .values({
+        studentFeeId,
+        studentId,
+        amount: amount.toString(),
+        paymentDate,
+        paymentMethod,
+        transactionId: transactionId || null,
+        receiptNumber,
+        remarks: remarks || null,
+        collectedBy,
+      })
+      .returning();
+
+    // Update student fee
+    const newPaidAmount = parseFloat(studentFee.paidAmount) + paymentAmount;
+    const newDueAmount = dueAmount - paymentAmount;
+    const newStatus = newDueAmount === 0 ? 'paid' : newDueAmount < parseFloat(studentFee.totalAmount) ? 'partial' : 'pending';
+
+    await db
+      .update(studentFees)
+      .set({
+        paidAmount: newPaidAmount.toString(),
+        dueAmount: newDueAmount.toString(),
+        status: newStatus,
+        updatedAt: new Date(),
+      })
+      .where(eq(studentFees.id, studentFeeId));
+
+    res.status(201).json({
+      success: true,
+      message: 'Payment collected successfully',
+      data: {
+        payment,
+        receiptNumber,
+      },
+    });
+  } catch (error) {
+    console.error('Error collecting payment:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to collect payment',
+    });
+  }
+};
+
+// Get student fees
+export const getStudentFees = async (req: Request, res: Response) => {

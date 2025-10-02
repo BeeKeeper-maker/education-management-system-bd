@@ -1,0 +1,27 @@
+Testing Login API...
+
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": "69357b0f-8b70-4227-9cb5-91fc1f5990e6",
+      "email": "superadmin@edupro.com",
+      "firstName": "Super",
+      "lastName": "Admin",
+      "role": "superadmin",
+      "profileImageUrl": null,
+      "phone": "+1234567891",
+      "address": null,
+      "dateOfBirth": null,
+      "gender": null,
+      "bloodGroup": null,
+      "isActive": true,
+      "createdAt": "2025-10-01T15:32:49.992Z",
+      "updatedAt": "2025-10-01T15:32:49.992Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTM1N2IwZi04YjcwLTQyMjctOWNiNS05MWZjMWY1OTkwZTYiLCJlbWFpbCI6InN1cGVyYWRtaW5AZWR1cHJvLmNvbSIsInJvbGUiOiJzdXBlcmFkbWluIiwiaWF0IjoxNzU5MzMyOTA2LCJleHAiOjE3NTk5Mzc3MDZ9.bP4CVbz2fx9Up_HgXbAU8u-mdbQpAT9bqkRNzU1Bueo"
+  }
+}
+
+Done!

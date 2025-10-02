@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nlsof -i :5173\n</execute-command>\n</function_calls>'}

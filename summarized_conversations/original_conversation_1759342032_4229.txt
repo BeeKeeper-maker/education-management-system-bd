@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'The data is already seeded. Let me check if periods, exam types, and grading system exist:\n\n<function_calls>\n<execute-command>\npsql -U edupro -d edupro -c "SELECT COUNT(*) FROM periods;"\n</execute-command>\n</function_calls>'}

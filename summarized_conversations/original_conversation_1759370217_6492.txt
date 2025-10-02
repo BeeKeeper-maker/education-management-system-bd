@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'The servers aren\'t running. Let me check if there\'s a simpler way to start them. Let me check what\'s in the package.json scripts:\n\n<function_calls>\n<execute-command>\ngrep -A 2 \'"dev"\' package.json\n</execute-command>\n</function_calls>'}

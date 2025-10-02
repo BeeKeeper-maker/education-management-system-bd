@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'The frontend server isn\'t running. Let me check the backend and restart both servers:\n\n<function_calls>\n<execute-command>\nps aux | grep -E "tsx.*server" | grep -v grep\n</execute-command>\n</function_calls>'}

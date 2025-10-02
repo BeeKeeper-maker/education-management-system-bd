@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let\'s add the routes:\n\n<function_calls>\n<execute-command>\ngrep -n "financial/dashboard" client/src/App.tsx\n</execute-command>\n</function_calls>'}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nPGPASSWORD=edupro123 psql -U edupro -d edupro -h localhost -c "SELECT email, role, first_name, last_name FROM users;"\n</execute-command>\n</function_calls>'}

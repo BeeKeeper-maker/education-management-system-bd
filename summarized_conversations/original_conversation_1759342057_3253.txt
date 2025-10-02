@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Great! Both servers are running. Now let me expose the frontend port and start building the UI components:\n\n<function_calls>\n<expose-port>\n5173\n</expose-port>\n</function_calls>'}

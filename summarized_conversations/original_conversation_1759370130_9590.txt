@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let\'s register these routes in the main router:\n\n<function_calls>\n<execute-command>\ngrep -n "import.*routes" server/src/routes/index.ts | tail -5\n</execute-command>\n</function_calls>'}

@@ -1,0 +1,5 @@
+22:import FinancialDashboard from './pages/FinancialDashboard';
+23:import HostelManagement from './pages/HostelManagement';
+24:import RoomAllocation from './pages/RoomAllocation';
+25:import BookManagement from './pages/BookManagement';
+26:import IssueReturn from './pages/IssueReturn';

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me try a different approach to test the connection:\n\n<function_calls>\n<execute-command>\nPGPASSWORD=edupro123 psql -U edupro -d edupro -h localhost -c "SELECT version();"\n</execute-command>\n</function_calls>'}

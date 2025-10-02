@@ -1,0 +1,57 @@
+
+> edupro@1.0.0 db:generate
+> drizzle-kit generate:pg
+
+drizzle-kit: v0.20.18
+drizzle-orm: v0.29.5
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/workspace/drizzle.config.ts'
+45 tables
+class_subjects 7 columns 0 indexes 3 fks
+classes 8 columns 0 indexes 2 fks
+sections 8 columns 0 indexes 2 fks
+subjects 8 columns 0 indexes 0 fks
+syllabus_topics 9 columns 0 indexes 1 fks
+attendance 10 columns 0 indexes 2 fks
+class_attendance 7 columns 0 indexes 3 fks
+leave_applications 12 columns 0 indexes 2 fks
+exam_subjects 15 columns 0 indexes 4 fks
+exam_types 7 columns 0 indexes 0 fks
+exams 13 columns 0 indexes 3 fks
+grading_system 10 columns 0 indexes 0 fks
+marks 9 columns 0 indexes 3 fks
+results 16 columns 0 indexes 4 fks
+subject_results 10 columns 0 indexes 2 fks
+expense_categories 6 columns 0 indexes 0 fks
+expenses 13 columns 0 indexes 2 fks
+fee_categories 6 columns 0 indexes 0 fks
+fee_discounts 9 columns 0 indexes 2 fks
+fee_payments 12 columns 0 indexes 3 fks
+fee_structure_items 7 columns 0 indexes 2 fks
+fee_structures 8 columns 0 indexes 2 fks
+student_fees 12 columns 0 indexes 3 fks
+hostels 14 columns 0 indexes 1 fks
+room_allocations 12 columns 0 indexes 3 fks
+rooms 12 columns 0 indexes 1 fks
+sessions 3 columns 0 indexes 0 fks
+users 15 columns 0 indexes 0 fks
+academic_sessions 7 columns 0 indexes 0 fks
+campuses 7 columns 0 indexes 0 fks
+departments 7 columns 0 indexes 1 fks
+institutions 13 columns 0 indexes 0 fks
+shifts 6 columns 0 indexes 0 fks
+enrollments 9 columns 0 indexes 4 fks
+guardians 6 columns 0 indexes 1 fks
+student_guardians 6 columns 0 indexes 2 fks
+students 16 columns 0 indexes 1 fks
+exam_schedules 13 columns 0 indexes 2 fks
+periods 8 columns 0 indexes 0 fks
+timetable_entries 10 columns 0 indexes 5 fks
+announcements 12 columns 0 indexes 1 fks
+messages 9 columns 0 indexes 3 fks
+notifications 9 columns 0 indexes 1 fks
+book_issues 13 columns 0 indexes 4 fks
+books 19 columns 0 indexes 0 fks
+
+[✓] Your SQL migration file ➜ server/src/db/migrations/0003_abandoned_scrambler.sql 🚀

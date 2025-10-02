@@ -1,0 +1,13 @@
+
+> edupro@1.0.0 dev:server
+> tsx watch server/src/index.ts
+
+✅ Database connected successfully
+
+🚀 EduPro Server Started
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📍 Server: http://localhost:3000
+🌍 Environment: development
+📊 Database: Connected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

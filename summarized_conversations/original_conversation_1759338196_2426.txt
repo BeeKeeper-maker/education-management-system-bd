@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nsudo pg_ctlcluster 15 main start\n</execute-command>\n</function_calls>'}

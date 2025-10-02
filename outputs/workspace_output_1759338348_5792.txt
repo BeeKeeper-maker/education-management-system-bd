@@ -1,0 +1,11 @@
+total 32
+drwxr-xr-x 2 root root  164 Oct  1 14:52 .
+drwxr-xr-x 5 root root  100 Oct  1 14:53 ..
+-rw-r--r-- 1 root root 3108 Oct  1 14:51 academic.ts
+-rw-r--r-- 1 root root 2211 Oct  1 14:52 attendance.ts
+-rw-r--r-- 1 root root  252 Oct  1 14:52 index.ts
+-rw-r--r-- 1 root root 2268 Oct  1 14:52 notifications.ts
+-rw-r--r-- 1 root root 2800 Oct  1 14:51 organization.ts
+-rw-r--r-- 1 root root 3176 Oct  1 14:51 students.ts
+-rw-r--r-- 1 root root 2482 Oct  1 14:52 timetable.ts
+-rw-r--r-- 1 root root 1304 Oct  1 14:51 users.ts

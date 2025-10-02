@@ -1,0 +1,9 @@
+      <Route path="/exams/marks/:examSubjectId">$
+        <ProtectedRoute $
+          component={MarksEntry}$
+          allowedRoles={['superadmin', 'admin', 'teacher']}$
+        />$
+      </Route>$
+$
+      <Route path="/teachers">$
+        <ProtectedRoute component={() => <div>Teachers Page (Coming Soon)</div>} />$

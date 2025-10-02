@@ -1,0 +1,13 @@
+    name     | start_time | end_time | is_break 
+-------------+------------+----------+----------
+ Period 1    | 08:00      | 08:45    | f
+ Period 2    | 08:45      | 09:30    | f
+ Period 3    | 09:30      | 10:15    | f
+ Short Break | 10:15      | 10:30    | t
+ Period 4    | 10:30      | 11:15    | f
+ Period 5    | 11:15      | 12:00    | f
+ Lunch Break | 12:00      | 12:45    | t
+ Period 6    | 12:45      | 13:30    | f
+ Period 7    | 13:30      | 14:15    | f
+(9 rows)
+

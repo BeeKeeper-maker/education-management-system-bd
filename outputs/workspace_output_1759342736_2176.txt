@@ -1,0 +1,40 @@
+        {isCollapsed && (
+          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mx-auto">
+            <span className="text-lg font-bold text-primary-foreground">EP</span>
+          </div>
+        )}
+      </div>
+
+      {/* User Info */}
+      <div className="p-4 border-b">
+        <div className={cn(
+          "flex items-center",
+          isCollapsed ? "justify-center" : "space-x-3"
+        )}>
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+            <span className="text-sm font-semibold text-primary">
+              {user?.firstName?.[0]}{user?.lastName?.[0]}
+            </span>
+          </div>
+          {!isCollapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        {navigation.map((item) => {
+          const Icon = item.icon;
+          const isActive = location === item.href;
+          
+          return (
+            <Link key={item.href} href={item.href}>
+              <a
+                className={cn(
+                  'flex items-center px-3 py-2 rounded-lg transition-colors group relative',

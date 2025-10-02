@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Excellent! Database seeded successfully! Now let me verify the data was inserted correctly:\n\n<function_calls>\n<execute-command>\nPGPASSWORD=edupro123 psql -U edupro -d edupro -h localhost -c "SELECT email, role, \\"firstName\\", \\"lastName\\" FROM users;"\n</execute-command>\n</function_calls>'}

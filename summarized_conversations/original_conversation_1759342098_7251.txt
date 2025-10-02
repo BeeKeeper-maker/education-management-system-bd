@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   COMMAND  PID USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME\\\\n   node    2476 root   29u  IPv6 170681835      0t0  TCP *:3000 (LISTEN)\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

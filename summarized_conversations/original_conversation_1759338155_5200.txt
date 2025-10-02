@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Perfect! Frontend is running. Now let me expose the port so you can access it:\n\n<function_calls>\n<expose-port>\n5173\n</expose-port>\n</function_calls>'}

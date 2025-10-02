@@ -1,0 +1,8 @@
+
+    await db.insert(subjects).values(subjectsData);
+    console.log('✅ Subjects created');
+
+    console.log('\n🎉 Database seeded successfully!\n');
+    console.log('📧 Login Credentials:');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('SuperAdmin: superadmin@edupro.com / Password@123');

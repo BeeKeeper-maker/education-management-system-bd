@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': "Let me check what's running and manually start vite in a different way:\n\n<function_calls>\n<execute-command>\ncd /workspace && ./node_modules/.bin/vite\n</execute-command>\n</function_calls>"}

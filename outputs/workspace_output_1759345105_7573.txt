@@ -1,0 +1,30 @@
+> edupro@1.0.0 db:seed
+> tsx server/src/db/seed.ts
+
+🌱 Seeding database...
+✅ Institution created
+✅ Academic session created
+✅ Shifts created
+❌ Seeding failed: error: duplicate key value violates unique constraint "users_email_unique"
+    at /workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/workspace/node_modules/src/node-postgres/session.ts:65:19)
+    at async seed (/workspace/server/src/db/seed.ts:65:26) {
+  length: 219,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (email)=(superadmin@edupro.com) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'users',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'users_email_unique',
+  file: 'nbtinsert.c',
+  line: '664',
+  routine: '_bt_check_unique'
+}

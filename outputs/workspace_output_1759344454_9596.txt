@@ -1,0 +1,5 @@
+6:import attendanceRoutes from './attendance.routes';
+7:import timetableRoutes from './timetable.routes';
+8:import examinationsRoutes from './examinations.routes';
+9:import feesRoutes from './fees.routes';
+10:import expensesRoutes from './expenses.routes';

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncd client && npm run dev > /tmp/frontend.log 2>&1 &\necho $!\n</execute-command>\n</function_calls>'}

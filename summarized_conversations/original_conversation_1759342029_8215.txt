@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <str-replace> ToolResult(success=False, output="String \'await db.insert(subjects).values(subjectsData);\\n      console.log(\'✅ Subjects created\');\\n\\n      console.log(\'\\\\n🎉 Database seeded successfully!\\\\n\');\' not found in file") </str-replace> </tool_result>'}

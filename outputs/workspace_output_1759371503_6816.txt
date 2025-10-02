@@ -1,0 +1,4 @@
+       name: 'Notice Board',
+       href: '/notice-board',
+       icon: Megaphone,
+       roles: ['superadmin', 'admin'],

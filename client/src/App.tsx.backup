@@ -1,0 +1,180 @@
+import { Route, Switch, Redirect } from 'wouter';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Toaster } from './components/ui/toaster';
+import MainLayout from './components/layout/MainLayout';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import StudentAdmission from './pages/StudentAdmission';
+import StudentsList from './pages/StudentsList';
+import StudentProfile from './pages/StudentProfile';
+import TakeAttendance from './pages/TakeAttendance';
+import AttendanceReports from './pages/AttendanceReports';
+import TimetableBuilder from './pages/TimetableBuilder';
+import MyTimetable from './pages/MyTimetable';
+import ExamManagement from './pages/ExamManagement';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+// Protected Route Component
+function ProtectedRoute({ 
+  component: Component,
+  allowedRoles,
+}: { 
+  component: React.ComponentType;
+  allowedRoles?: string[];
+}) {
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />;
+  }
+
+  // Check role-based access
+  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    return (
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">403</h1>
+            <p className="text-muted-foreground">You don't have permission to access this page</p>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  return (
+    <MainLayout>
+      <Component />
+    </MainLayout>
+  );
+}
+
+// Public Route Component
+function PublicRoute({ component: Component }: { component: React.ComponentType }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
+  return <Component />;
+}
+
+function AppRoutes() {
+  return (
+    <Switch>
+      <Route path="/login">
+        <PublicRoute component={Login} />
+      </Route>
+      
+      <Route path="/dashboard">
+        <ProtectedRoute component={Dashboard} />
+      </Route>
+
+      <Route path="/users">
+        <ProtectedRoute 
+          component={Users} 
+          allowedRoles={['superadmin', 'admin']}
+        />
+      </Route>
+
+      <Route path="/students">
+        <ProtectedRoute 
+          component={StudentsList}
+          allowedRoles={['superadmin', 'admin', 'teacher']}
+        />
+      </Route>
+
+      <Route path="/students/admission">
+        <ProtectedRoute 
+          component={StudentAdmission}
+          allowedRoles={['superadmin', 'admin']}
+        />
+      </Route>
+
+      <Route path="/students/:id">
+        <ProtectedRoute 
+          component={StudentProfile}
+          allowedRoles={['superadmin', 'admin', 'teacher']}
+        />
+      </Route>
+
+      <Route path="/teachers">
+        <ProtectedRoute component={() => <div>Teachers Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/classes">
+        <ProtectedRoute component={() => <div>Classes Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/attendance">
+        <ProtectedRoute component={() => <div>Attendance Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/timetable">
+        <ProtectedRoute component={() => <div>Timetable Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/notifications">
+        <ProtectedRoute component={() => <div>Notifications Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/settings">
+        <ProtectedRoute component={() => <div>Settings Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/">
+        <Redirect to="/dashboard" />
+      </Route>
+
+      <Route>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">404</h1>
+            <p className="text-muted-foreground">Page not found</p>
+          </div>
+        </div>
+      </Route>
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppRoutes />
+        <Toaster />
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

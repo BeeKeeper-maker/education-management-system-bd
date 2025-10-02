@@ -1,0 +1,1 @@
+21:  const navigation = user ? getNavigationForRole(user.role) : [];

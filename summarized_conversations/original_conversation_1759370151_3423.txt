@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nhead -20 server/src/db/seed.ts\n</execute-command>\n</function_calls>'}

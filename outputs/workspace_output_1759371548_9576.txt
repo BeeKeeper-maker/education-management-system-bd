@@ -1,0 +1,5 @@
+
+> edupro@1.0.0 dev
+> concurrently &quot;npm run dev:server&quot; &quot;npm run dev:client&quot;
+
+sh: 1: Syntax error: "&" unexpected

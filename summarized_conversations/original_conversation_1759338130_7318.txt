@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'I can see you want to me to continue processing - do have comment or hint on how I am progressing? Would you like me to completely change approach and work on different problem?\n'}

@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   15/main (port 5432): down\\\\n",\\n  "exit_code": 3,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

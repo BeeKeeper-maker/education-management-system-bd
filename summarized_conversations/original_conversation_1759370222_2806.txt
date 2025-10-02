@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\npg_ctl -D /var/lib/postgresql/data start > /tmp/pg.log 2>&1 &\nsleep 3 && tail -10 /tmp/pg.log\n</execute-command>\n</function_calls>'}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let me start the backend server:\n\n<function_calls>\n<execute-command>\nnpm run dev:server\n</execute-command>\n</function_calls>'}

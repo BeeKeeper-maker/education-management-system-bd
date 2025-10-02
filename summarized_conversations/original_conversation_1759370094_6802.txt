@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': "The build is looking for index.html in the wrong location. Let's check the vite config:\n\n<function_calls>\n<execute-command>\ncat vite.config.ts\n</execute-command>\n</function_calls>"}

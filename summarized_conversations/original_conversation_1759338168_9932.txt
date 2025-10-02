@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '## Step 9: Add React Hook Form and Zod Resolver\n\n<function_calls>\n<execute-command>\nnpm install @hookform/resolvers\n</execute-command>\n</function_calls>'}

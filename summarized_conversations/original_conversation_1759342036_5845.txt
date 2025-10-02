@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nDATABASE_URL=postgresql://edupro:edupro123@localhost:5432/edupro npx tsx server/src/db/seed-new-data.ts\n</execute-command>\n</function_calls>'}

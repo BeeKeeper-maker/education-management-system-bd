@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': "The seed needs environment variables. Let me create a simpler approach - let's add the seed to the main seed file:\n\n<function_calls>\n<execute-command>\ncat server/src/db/seeds/seed.ts\n</execute-command>\n</function_calls>"}

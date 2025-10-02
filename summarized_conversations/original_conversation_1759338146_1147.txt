@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Perfect! Migrations completed successfully. Now let me seed the database with the SuperAdmin user:\n\n<function_calls>\n<execute-command>\nnpm run db:seed\n</execute-command>\n</function_calls>'}

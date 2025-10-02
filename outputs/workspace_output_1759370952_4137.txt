@@ -1,0 +1,6 @@
+       // Send SMS notification if there's a fine
+       if (fineAmount && fineAmount > 0) {
+         try {
+           const [user] = await db
+             .select({
+               name: users.name,

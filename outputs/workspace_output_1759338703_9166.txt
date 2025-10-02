@@ -1,0 +1,11 @@
+ grade | grade_point | description  
+-------+-------------+--------------
+ A+    |        5.00 | Outstanding
+ A     |        4.00 | Excellent
+ A-    |        3.50 | Very Good
+ B     |        3.00 | Good
+ C     |        2.50 | Satisfactory
+ D     |        2.00 | Pass
+ F     |        0.00 | Fail
+(7 rows)
+

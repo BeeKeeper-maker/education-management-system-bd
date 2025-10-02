@@ -1,0 +1,28 @@
+
+> edupro@1.0.0 db:seed
+> tsx server/src/db/seed.ts
+
+🌱 Seeding database...
+✅ Institution created
+✅ Academic session created
+✅ Shifts created
+✅ SuperAdmin created
+✅ Admin created
+✅ Teacher created
+✅ Student created
+✅ Guardian created
+✅ Classes created
+✅ Sections created
+✅ Subjects created
+
+🎉 Database seeded successfully!
+
+📧 Login Credentials:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SuperAdmin: superadmin@edupro.com / Password@123
+Admin:      admin@edupro.com / Password@123
+Teacher:    teacher@edupro.com / Password@123
+Student:    student@edupro.com / Password@123
+Guardian:   guardian@edupro.com / Password@123
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

@@ -1,0 +1,5 @@
+
+> edupro@1.0.0 db:seed
+> tsx server/src/db/seed.ts
+
+🌱 Seeding database...

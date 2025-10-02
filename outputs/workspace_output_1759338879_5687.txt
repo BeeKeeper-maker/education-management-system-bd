@@ -1,0 +1,24 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes';
+import usersRoutes from './users.routes';
+import studentsRoutes from './students.routes';
+import academicRoutes from './academic.routes';
+
+const router = Router();
+
+// Mount routes
+router.use('/auth', authRoutes);
+router.use('/users', usersRoutes);
+router.use('/students', studentsRoutes);
+router.use('/academic', academicRoutes);
+
+// Health check endpoint
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+export default router;

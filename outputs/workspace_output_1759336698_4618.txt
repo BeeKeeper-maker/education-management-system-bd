@@ -1,0 +1,5 @@
+{
+  "success": true,
+  "message": "Server is running",
+  "timestamp": "2025-10-01T16:38:18.675Z"
+}

@@ -1,0 +1,5 @@
+server/src/routes/index.ts
+server/src/config/index.ts
+server/src/db/schema/index.ts
+server/src/db/index.ts
+server/src/index.ts

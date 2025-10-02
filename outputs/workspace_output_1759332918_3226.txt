@@ -1,0 +1,9 @@
+
+> edupro@1.0.0 dev:client
+> vite
+
+
+  VITE v5.4.20  ready in 171 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose

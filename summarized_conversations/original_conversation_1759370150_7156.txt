@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <str-replace> ToolResult(success=False, output="String \'import { db, pool } from \'./index\';\\nimport {\\n  users,\\n  institutions,\\n  academicSessions,\\n  shifts,\\n  classes,\\n  sections,\\n  subjects,\\n} from \'./schema\';\' not found in file") </str-replace> </tool_result>'}

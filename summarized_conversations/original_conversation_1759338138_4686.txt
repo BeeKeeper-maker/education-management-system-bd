@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Docker is not available in this environment. Let me check if PostgreSQL is already installed:\n\n<function_calls>\n<execute-command>\nwhich psql\n</execute-command>\n</function_calls>'}

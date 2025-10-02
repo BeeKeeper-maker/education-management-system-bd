@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': "Perfect! Migration generated. Now let's run it:\n\n<function_calls>\n<execute-command>\ncd /workspace && npm run db:migrate\n</execute-command>\n</function_calls>"}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'There\'s a corrupted node_modules. Let me check if there are already running processes:\n\n<function_calls>\n<execute-command>\nps aux | grep -E "node|vite|tsx" | grep -v grep | head -10\n</execute-command>\n</function_calls>'}

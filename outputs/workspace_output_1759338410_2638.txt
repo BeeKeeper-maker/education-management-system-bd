@@ -1,0 +1,9 @@
+
+> edupro@1.0.0 db:generate
+> drizzle-kit generate:pg
+
+drizzle-kit: v0.20.18
+drizzle-orm: v0.29.5
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/workspace/drizzle.config.ts'

@@ -1,0 +1,3 @@
+client/src/components/layout/Sidebar.tsx
+client/src/components/layout/MainLayout.tsx
+client/src/components/layout/TopBar.tsx

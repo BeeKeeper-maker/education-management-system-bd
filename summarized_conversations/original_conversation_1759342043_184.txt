@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let me register these routes in the main server file:\n\n<function_calls>\n<execute-command>\ncat server/src/index.ts | grep -A 20 "// Routes"\n</execute-command>\n</function_calls>'}

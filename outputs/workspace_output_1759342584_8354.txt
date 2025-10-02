@@ -1,0 +1,20 @@
+1:import { Route, Switch, Redirect } from 'wouter';
+30:// Protected Route Component
+31:function ProtectedRoute({ 
+73:// Public Route Component
+74:function PublicRoute({ component: Component }: { component: React.ComponentType }) {
+92:function AppRoutes() {
+95:      <Route path="/login">
+96:        <PublicRoute component={Login} />
+97:      </Route>
+99:      <Route path="/dashboard">
+100:        <ProtectedRoute component={Dashboard} />
+101:      </Route>
+103:      <Route path="/users">
+104:        <ProtectedRoute 
+108:      </Route>
+110:      <Route path="/students">
+111:        <ProtectedRoute 
+115:      </Route>
+117:      <Route path="/students/admission">
+118:        <ProtectedRoute 

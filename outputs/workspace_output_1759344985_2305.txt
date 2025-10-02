@@ -1,0 +1,6 @@
+server/src/db/seeds/seed-examinations.ts
+server/src/db/seeds/seed-periods.ts
+server/src/db/seeds/seed-financial.ts
+server/src/db/seeds/hostel-library-seed.ts
+server/src/db/seed.ts
+server/src/db/seed-new-data.ts

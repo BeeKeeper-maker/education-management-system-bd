@@ -1,0 +1,4 @@
+
+> edupro@1.0.0 db:migrate
+> tsx server/src/db/migrate.ts
+

@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   \\\\n   > edupro@1.0.0 dev\\\\n   > concurrently &quot;npm run dev:server&quot; &quot;npm run dev:client&quot;\\\\n   \\\\n   sh: 1: Syntax error: \\\\"&\\\\" unexpected\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

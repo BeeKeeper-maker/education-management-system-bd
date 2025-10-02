@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncurl -s http://localhost:3000/api/health\n</execute-command>\n</function_calls>'}

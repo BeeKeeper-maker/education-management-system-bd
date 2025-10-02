@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<create-file file_path="server/src/types/express-session.d.ts">\nimport \'express-session\';\n\ndeclare module \'express-session\' {\n  interface SessionData {\n    userId: string;\n    email: string;\n    role: string;\n  }\n}\n</create-file>\n</function_calls>'}

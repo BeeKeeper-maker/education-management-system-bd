@@ -1,0 +1,12 @@
+❌ Database connection failed: Error: connect ECONNREFUSED 127.0.0.1:5432
+    at /workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async testConnection (/workspace/server/src/db/index.ts:24:20)
+    at async startServer (/workspace/server/src/index.ts:68:25) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 5432
+}
+❌ Failed to connect to database. Exiting...

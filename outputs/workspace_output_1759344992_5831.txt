@@ -1,0 +1,30 @@
+      { name: 'Science', code: 'SCI', type: 'both' },
+      { name: 'Social Studies', code: 'SS', type: 'theory' },
+      { name: 'Computer Science', code: 'CS', type: 'both' },
+      { name: 'Physical Education', code: 'PE', type: 'practical' },
+    ];
+
+    await db.insert(subjects).values(subjectsData);
+    console.log('✅ Subjects created');
+
+    console.log('\n🎉 Database seeded successfully!\n');
+    console.log('📧 Login Credentials:');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('SuperAdmin: superadmin@edupro.com / Password@123');
+    console.log('Admin:      admin@edupro.com / Password@123');
+    console.log('Teacher:    teacher@edupro.com / Password@123');
+    console.log('Student:    student@edupro.com / Password@123');
+    console.log('Guardian:   guardian@edupro.com / Password@123');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+
+  } catch (error) {
+    console.error('❌ Seeding failed:', error);
+    process.exit(1);
+  } finally {
+    await pool.end();
+  }
+
+  process.exit(0);
+}
+
+seed();

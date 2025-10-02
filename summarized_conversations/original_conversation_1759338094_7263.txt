@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<create-file file_path="tsconfig.node.json">\n{\n  "compilerOptions": {\n    "composite": true,\n    "skipLibCheck": true,\n    "module": "ESNext",\n    "moduleResolution": "bundler",\n    "allowSyntheticDefaultImports": true\n  },\n  "include": ["vite.config.ts"]\n}\n</create-file>\n</function_calls>'}

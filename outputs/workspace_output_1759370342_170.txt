@@ -1,0 +1,12 @@
+// Export all schemas from a single entry point
+export * from './users';
+export * from './organization';
+export * from './academic';
+export * from './students';
+export * from './attendance';
+export * from './timetable';
+export * from './notifications';
+export * from './examinations';
+export * from './financial';
+export * from './hostel';
+export * from './library';

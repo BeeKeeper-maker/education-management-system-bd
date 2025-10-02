@@ -1,0 +1,11 @@
+      remarks: record.remarks || null,
+      markedBy,
+    }));
+
+    await db.insert(attendance).values(attendanceData);
+
+    // Calculate statistics
+    const presentCount = attendanceRecords.filter((r: any) => r.status === 'present').length;
+    const absentCount = attendanceRecords.filter((r: any) => r.status === 'absent').length;
+    const lateCount = attendanceRecords.filter((r: any) => r.status === 'late').length;
+    const excusedCount = attendanceRecords.filter((r: any) => r.status === 'excused').length;

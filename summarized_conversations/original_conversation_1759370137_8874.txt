@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let\'s restart the backend server:\n\n<function_calls>\n<execute-command>\npkill -f "tsx.*server/src/index.ts" && sleep 2 && echo "Backend stopped"\n</execute-command>\n</function_calls>'}

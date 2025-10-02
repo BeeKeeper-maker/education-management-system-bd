@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nfind server/src -name "index.ts" -o -name "server.ts" -o -name "app.ts" | head -5\n</execute-command>\n</function_calls>'}

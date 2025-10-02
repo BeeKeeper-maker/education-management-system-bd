@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Both servers are down. Let me restart them:\n\n<function_calls>\n<execute-command>\ncd /workspace && npm run dev > /tmp/dev.log 2>&1 &\nsleep 8 && tail -30 /tmp/dev.log\n</execute-command>\n</function_calls>'}

@@ -1,0 +1,11 @@
+         <Route path="/financial/dashboard">
+           <ProtectedRoute 
+             component={FinancialDashboard}
+             allowedRoles={["superadmin", "admin", "accountant"]}
+           />
+         </Route>
+      <Route path="/teachers">
+        <ProtectedRoute component={() => <div>Teachers Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/classes">

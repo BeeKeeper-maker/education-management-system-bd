@@ -1,0 +1,4 @@
+
+> edupro@1.0.0 db:generate
+> drizzle-kit generate
+

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'I see the issue - the `academicSessions` table reference is not properly imported. Let me check the academic schema:\n\n<function_calls>\n<execute-command>\ncat server/src/db/schema/academic.ts\n</execute-command>\n</function_calls>'}

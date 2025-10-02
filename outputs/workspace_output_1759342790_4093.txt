@@ -1,0 +1,16 @@
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Exams & Results',
+    href: '/exams',
+    icon: BookMarked,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Fees & Payments',
+    href: '/fees',
+    icon: DollarSign,
+    roles: ['superadmin', 'admin', 'accountant', 'student', 'guardian'],
+  },
+  {
+    name: 'Hostel',

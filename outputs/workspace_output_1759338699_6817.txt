@@ -1,0 +1,9 @@
+      name      | weightage 
+----------------+-----------
+ First Terminal |        25
+ Mid Terminal   |        25
+ Final Terminal |        50
+ Class Test     |        10
+ Quiz           |         5
+(5 rows)
+

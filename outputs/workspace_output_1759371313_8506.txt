@@ -1,0 +1,4 @@
+         <Route path="/notice-board">
+              <ProtectedRoute 
+                component={NoticeBoard}
+                allowedRoles={["superadmin", "admin"]}

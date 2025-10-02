@@ -1,0 +1,41 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1759332693013,
+      "tag": "0000_tricky_the_anarchist",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1759338440356,
+      "tag": "0001_unique_marvel_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1759340756120,
+      "tag": "0002_daily_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1759344235852,
+      "tag": "0003_abandoned_scrambler",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1759370363717,
+      "tag": "0004_narrow_sersi",
+      "breakpoints": true
+    }
+  ]
+}

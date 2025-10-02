@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let me check if the servers are still running and restart them if needed:\n\n<function_calls>\n<execute-command>\npkill -f "tsx watch"\n</execute-command>\n</function_calls>'}

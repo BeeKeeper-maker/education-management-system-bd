@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'I see there are special characters. Let me rewrite the entire seed file more carefully:\n\n<function_calls>\n<execute-command>\ncd server && npm run db:seed\n</execute-command>\n</function_calls>'}

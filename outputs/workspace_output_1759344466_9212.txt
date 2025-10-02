@@ -1,0 +1,5 @@
+21:router.use('/attendance', attendanceRoutes);
+22:router.use('/timetable', timetableRoutes);
+23:router.use('/examinations', examinationsRoutes);
+24:router.use('/fees', feesRoutes);
+25:router.use('/expenses', expensesRoutes);

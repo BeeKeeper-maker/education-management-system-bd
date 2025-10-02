@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: edupro_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: edupro
+      POSTGRES_USER: edupro_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_this_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - edupro_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edupro_user -d edupro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # EduPro Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edupro_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://edupro_user:${DB_PASSWORD:-change_this_password}@postgres:5432/edupro
+      JWT_SECRET: ${JWT_SECRET:-change_this_jwt_secret_in_production}
+      SESSION_SECRET: ${SESSION_SECRET:-change_this_session_secret_in_production}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+    volumes:
+      - ./uploads:/app/uploads
+    ports:
+      - "3000:3000"
+    networks:
+      - edupro_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: edupro_nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./uploads:/var/www/uploads:ro
+    networks:
+      - edupro_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  edupro_network:
+    driver: bridge

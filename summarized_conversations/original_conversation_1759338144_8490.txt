@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me fix the drizzle-kit command:\n\n<function_calls>\n<str-replace file_path="package.json">\n<old_str>    "db:generate": "drizzle-kit generate",</old_str>\n<new_str>    "db:generate": "drizzle-kit generate:pg",</new_str>\n</str-replace>\n</function_calls>'}

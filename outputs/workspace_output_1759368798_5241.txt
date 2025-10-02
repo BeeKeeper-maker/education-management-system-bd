@@ -1,0 +1,3 @@
+    "dev": "concurrently &quot;npm run dev:server&quot; &quot;npm run dev:client&quot;",
+    "dev:server": "tsx watch server/src/index.ts",
+    "dev:client": "vite",

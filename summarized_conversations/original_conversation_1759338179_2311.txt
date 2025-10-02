@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Great! Vite is already running. Let me verify both servers are working:\n\n<function_calls>\n<execute-command>\ncurl -s http://localhost:3000/api/health | jq .\n</execute-command>\n</function_calls>'}

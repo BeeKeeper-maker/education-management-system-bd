@@ -1,0 +1,95 @@
+export const returnBook = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { returnDate, fineAmount, remarks } = req.body;
+    const userId = (req as any).user.id;
+
+    const issue = await db.select().from(bookIssues).where(eq(bookIssues.id, id)).limit(1);
+
+    if (!issue.length) {
+      return res.status(404).json({
+        success: false,
+        message: 'Issue record not found',
+      });
+    }
+
+    if (issue[0].status !== 'issued') {
+      return res.status(400).json({
+        success: false,
+        message: 'Book is not currently issued',
+      });
+    }
+
+    // Update issue record
+    await db
+      .update(bookIssues)
+      .set({
+        status: 'returned',
+        returnDate,
+        fineAmount: fineAmount || 0,
+        remarks: remarks || issue[0].remarks,
+        returnedBy: userId,
+        updatedAt: new Date(),
+      })
+      .where(eq(bookIssues.id, id));
+
+    // Update book available quantity
+    await db.execute(sql`
+      UPDATE books 
+      SET available_quantity = available_quantity + 1,
+          updated_at = NOW()
+      WHERE id = ${issue[0].bookId}
+    `);
+
+    res.json({
+      success: true,
+      message: 'Book returned successfully',
+    });
+  } catch (error) {
+    console.error('Return book error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to return book',
+    });
+  }
+};
+
+// Get book issues
+export const getBookIssues = async (req: Request, res: Response) => {
+  try {
+    const { bookId, studentId, status } = req.query;
+
+    const conditions = [];
+    if (bookId) conditions.push(eq(bookIssues.bookId, bookId as string));
+    if (studentId) conditions.push(eq(bookIssues.studentId, studentId as string));
+    if (status) conditions.push(eq(bookIssues.status, status as string));
+
+    let query = db
+      .select({
+        issue: bookIssues,
+        book: books,
+        student: {
+          id: sql`students.id`,
+          studentId: sql`students.student_id`,
+          firstName: sql`students.first_name`,
+          lastName: sql`students.last_name`,
+          email: sql`students.email`,
+        },
+      })
+      .from(bookIssues)
+      .innerJoin(books, eq(bookIssues.bookId, books.id))
+      .innerJoin(sql`students`, eq(bookIssues.studentId, sql`students.id`));
+
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
+    }
+
+    const issues = await query.orderBy(desc(bookIssues.issueDate));
+
+    res.json({
+      success: true,
+      issues,
+    });
+  } catch (error) {
+    console.error('Get issues error:', error);
+    res.status(500).json({

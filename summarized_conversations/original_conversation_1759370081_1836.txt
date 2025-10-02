@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   7:import { getNavigationForRole } from \\\'@/lib/navigation\\\';\\\\n   21:  const navigation = user ? getNavigationForRole(user.role) : [];\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncat client/src/App.tsx | head -25 | tail -10\n</execute-command>\n</function_calls>'}

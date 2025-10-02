@@ -1,0 +1,11 @@
+    roles: ['superadmin', 'admin', 'accountant'],
+  },
+  {
+    name: 'Hostel',
+    href: '/hostel',
+    icon: Hotel,
+    roles: ['superadmin', 'admin', 'hostel_manager', 'student'],
+  },
+  {
+    name: 'Institution Settings',
+    href: '/institution',

@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <str-replace> ToolResult(success=False, output="File \'server/src/db/seeds/index.ts\' does not exist") </str-replace> </tool_result>'}

@@ -1,0 +1,61 @@
+
+      <Route path="/users">
+        <ProtectedRoute 
+          component={Users} 
+          allowedRoles={['superadmin', 'admin']}
+        />
+      </Route>
+
+      <Route path="/students">
+        <ProtectedRoute 
+          component={StudentsList}
+          allowedRoles={['superadmin', 'admin', 'teacher']}
+        />
+      </Route>
+
+      <Route path="/students/admission">
+        <ProtectedRoute 
+          component={StudentAdmission}
+          allowedRoles={['superadmin', 'admin']}
+        />
+      </Route>
+
+      <Route path="/students/:id">
+        <ProtectedRoute 
+          component={StudentProfile}
+          allowedRoles={['superadmin', 'admin', 'teacher']}
+        />
+      </Route>
+
+      <Route path="/teachers">
+        <ProtectedRoute component={() => <div>Teachers Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/classes">
+        <ProtectedRoute component={() => <div>Classes Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/attendance">
+        <ProtectedRoute component={() => <div>Attendance Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/timetable">
+        <ProtectedRoute component={() => <div>Timetable Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/notifications">
+        <ProtectedRoute component={() => <div>Notifications Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/settings">
+        <ProtectedRoute component={() => <div>Settings Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/">
+        <Redirect to="/dashboard" />
+      </Route>
+
+      <Route>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">404</h1>

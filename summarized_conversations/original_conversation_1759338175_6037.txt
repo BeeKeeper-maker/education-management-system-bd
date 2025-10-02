@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Perfect! Now let me start the frontend:\n\n<function_calls>\n<execute-command>\nnpm run dev:client\n</execute-command>\n</function_calls>'}

@@ -1,0 +1,4 @@
+🌱 Seeding financial data...
+✅ Fee categories seeded
+✅ Expense categories seeded
+✅ Financial data seeded successfully

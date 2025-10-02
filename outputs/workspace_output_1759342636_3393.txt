@@ -1,0 +1,8 @@
+import MyTimetable from './pages/MyTimetable';
+import ExamManagement from './pages/ExamManagement';
+import ExamSchedule from './pages/ExamSchedule';
+import MarksEntry from './pages/MarksEntry';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {

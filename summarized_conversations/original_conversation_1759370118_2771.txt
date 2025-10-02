@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <str-replace> ToolResult(success=False, output="String \'export * from \'./users\';\\nexport * from \'./students\';\\nexport * from \'./academic\';\\nexport * from \'./attendance\';\\nexport * from \'./timetable\';\\nexport * from \'./exams\';\\nexport * from \'./financial\';\' not found in file") </str-replace> </tool_result>'}

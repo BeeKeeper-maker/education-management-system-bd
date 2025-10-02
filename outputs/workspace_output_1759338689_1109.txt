@@ -1,0 +1,7 @@
+🌱 Seeding new data (periods, exam types, grading system)...
+✅ Periods created
+✅ Exam types created
+✅ Grading system created
+
+🎉 New data seeded successfully!
+

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me try using node directly:\n\n<function_calls>\n<execute-command>\nnode node_modules/vite/bin/vite.js\n</execute-command>\n</function_calls>'}

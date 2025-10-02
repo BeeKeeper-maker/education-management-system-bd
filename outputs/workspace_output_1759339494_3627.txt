@@ -1,0 +1,11 @@
+      </Route>
+
+      <Route path="/attendance">
+        <ProtectedRoute component={() => <div>Attendance Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/timetable">
+        <ProtectedRoute component={() => <div>Timetable Page (Coming Soon)</div>} />
+      </Route>
+
+      <Route path="/notifications">

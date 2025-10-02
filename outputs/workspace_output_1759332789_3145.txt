@@ -1,0 +1,9 @@
+         email         |    role    | first_name | last_name 
+-----------------------+------------+------------+-----------
+ superadmin@edupro.com | superadmin | Super      | Admin
+ admin@edupro.com      | admin      | Admin      | User
+ teacher@edupro.com    | teacher    | John       | Teacher
+ student@edupro.com    | student    | Jane       | Student
+ guardian@edupro.com   | guardian   | Robert     | Guardian
+(5 rows)
+

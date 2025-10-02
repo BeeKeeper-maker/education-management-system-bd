@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nnpm run db:generate\n</execute-command>\n</function_calls>'}

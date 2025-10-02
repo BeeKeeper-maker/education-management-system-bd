@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'PostgreSQL is not running. Let me start it:\n\n<function_calls>\n<execute-command>\nsudo service postgresql start\n</execute-command>\n</function_calls>'}

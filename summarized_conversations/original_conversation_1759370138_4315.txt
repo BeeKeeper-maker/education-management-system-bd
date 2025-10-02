@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncd /workspace && npm run dev:server > /tmp/backend.log 2>&1 &\nsleep 5 && tail -20 /tmp/backend.log\n</execute-command>\n</function_calls>'}

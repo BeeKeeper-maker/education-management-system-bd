@@ -1,0 +1,6 @@
+       // Send SMS notification to guardian
+       try {
+         const [student] = await db
+           .select({
+             name: users.name,
+           })

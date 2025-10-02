@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Great! Now let me test the database connection:\n\n<function_calls>\n<execute-command>\npsql -U edupro -d edupro -h localhost -c "SELECT version();"\n</execute-command>\n</function_calls>'}

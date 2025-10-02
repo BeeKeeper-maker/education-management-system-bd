@@ -1,0 +1,5 @@
+    await db.insert(subjects).values(subjectsData);$
+    console.log('M-bM-^\M-^E Subjects created');$
+$
+    console.log('\nM-pM-^_M-^NM-^I Database seeded successfully!\n');$
+    console.log('M-pM-^_M-^SM-' Login Credentials:');$

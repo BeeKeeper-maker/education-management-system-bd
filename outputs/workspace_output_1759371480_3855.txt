@@ -1,0 +1,11 @@
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Exams & Results',
+    href: '/exams',
+    icon: BookMarked,
+    roles: ['superadmin', 'admin', 'teacher', 'student'],
+  },
+  {
+    name: 'Financial Dashboard',
+     },

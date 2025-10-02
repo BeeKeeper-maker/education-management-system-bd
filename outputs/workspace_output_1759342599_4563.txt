@@ -1,0 +1,30 @@
+import { Route, Switch, Redirect } from 'wouter';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Toaster } from './components/ui/toaster';
+import MainLayout from './components/layout/MainLayout';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import StudentAdmission from './pages/StudentAdmission';
+import StudentsList from './pages/StudentsList';
+import StudentProfile from './pages/StudentProfile';
+import TakeAttendance from './pages/TakeAttendance';
+import AttendanceReports from './pages/AttendanceReports';
+import TimetableBuilder from './pages/TimetableBuilder';
+import MyTimetable from './pages/MyTimetable';
+import ExamManagement from './pages/ExamManagement';
+import ExamSchedule from './pages/ExamSchedule';
+import MarksEntry from './pages/MarksEntry';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+// Protected Route Component
