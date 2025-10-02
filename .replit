@@ -15,10 +15,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Dev Server"
+args = "Start application"
 
 [[workflows.workflow]]
-name = "Dev Server"
+name = "Start application"
 author = "agent"
 
 [[workflows.workflow.tasks]]
@@ -36,10 +36,6 @@ externalPort = 3001
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 35531
-externalPort = 3002
 
 [deployment]
 deploymentTarget = "autoscale"
