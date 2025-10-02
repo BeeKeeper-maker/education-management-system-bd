@@ -10,6 +10,39 @@ The system features a modern React-based frontend with TypeScript and a Node.js/
 
 Preferred communication style: Simple, everyday language.
 
+## Replit Environment Setup
+
+This project has been configured to run in the Replit environment with the following setup:
+
+**Development Configuration:**
+- Frontend server runs on port 5000 (Vite dev server)
+- Backend server runs on port 3000 (Express server)
+- Vite proxies API requests from `/api` to the backend server
+- CORS configured to accept all origins in development mode
+- Host set to `0.0.0.0` with `allowedHosts: true` for Replit proxy support
+
+**Database:**
+- PostgreSQL database provisioned using Replit's built-in database
+- Migrations run automatically using Drizzle ORM
+- Database seeded with initial data including demo users
+
+**Demo Credentials:**
+- SuperAdmin: superadmin@edupro.com / Password@123
+- Admin: admin@edupro.com / Password@123
+- Teacher: teacher@edupro.com / Password@123
+- Student: student@edupro.com / Password@123
+- Guardian: guardian@edupro.com / Password@123
+
+**Running the Application:**
+- Development: `npm run dev` (starts both frontend and backend concurrently)
+- Database migrations: `npm run db:migrate`
+- Database seeding: `npm run db:seed`
+
+**Deployment:**
+- Configured for autoscale deployment
+- Build command: `npm run build`
+- Start command: `npm run start`
+
 ## System Architecture
 
 ### Frontend Architecture
