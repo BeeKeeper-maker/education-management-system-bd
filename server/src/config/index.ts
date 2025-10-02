@@ -8,12 +8,12 @@ export const config = {
   databaseUrl: process.env.DATABASE_URL!,
   
   jwt: {
-    secret: process.env.JWT_SECRET!,
+    secret: process.env.JWT_SECRET || 'dev-jwt-secret-change-in-production',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
   
   session: {
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET || 'dev-session-secret-change-in-production',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   },
   
@@ -29,11 +29,7 @@ export const config = {
   },
 };
 
-// Validate required environment variables
-const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET', 'SESSION_SECRET'];
-
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required environment variable: ${envVar}`);
-  }
+// Validate critical environment variables
+if (!process.env.DATABASE_URL) {
+  throw new Error(`Missing required environment variable: DATABASE_URL`);
 }
