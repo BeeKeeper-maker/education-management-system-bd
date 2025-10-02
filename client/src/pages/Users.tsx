@@ -381,7 +381,7 @@ export default function Users() {
                 <Label htmlFor="role">Role</Label>
                 <Select
                   value={selectedRole}
-                  onValueChange={(value) => setValue('role', value as UserRole)}
+                  onValueChange={(value) => setValue('role', value as 'student' | 'teacher' | 'guardian' | 'admin' | 'superadmin' | 'accountant' | 'hostel_manager')}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />

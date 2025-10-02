@@ -13,22 +13,37 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-const createTeacherSchema = z.object({
+const teacherFormSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email('Invalid email address').optional(),
+  password: z.string().optional(),
   phone: z.string().optional(),
   address: z.string().optional(),
   dateOfBirth: z.string().optional(),
   gender: z.enum(['male', 'female', 'other']).optional(),
   bloodGroup: z.string().optional(),
+  isEditing: z.boolean().optional(),
+}).superRefine((data, ctx) => {
+  if (!data.isEditing) {
+    if (!data.email) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Email is required',
+        path: ['email'],
+      });
+    }
+    if (!data.password || data.password.length < 8) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Password must be at least 8 characters',
+        path: ['password'],
+      });
+    }
+  }
 });
 
-const updateTeacherSchema = createTeacherSchema.omit({ email: true, password: true });
-
-type CreateTeacherFormData = z.infer<typeof createTeacherSchema>;
-type UpdateTeacherFormData = z.infer<typeof updateTeacherSchema>;
+type TeacherFormData = z.infer<typeof teacherFormSchema>;
 
 interface Teacher {
   id: string;
@@ -53,8 +68,8 @@ export default function Teachers() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState<Teacher | null>(null);
 
-  const form = useForm<CreateTeacherFormData>({
-    resolver: zodResolver(editingTeacher ? updateTeacherSchema : createTeacherSchema),
+  const form = useForm<TeacherFormData>({
+    resolver: zodResolver(teacherFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -65,6 +80,7 @@ export default function Teachers() {
       dateOfBirth: '',
       gender: 'male',
       bloodGroup: '',
+      isEditing: false,
     },
   });
 
@@ -77,8 +93,9 @@ export default function Teachers() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data: CreateTeacherFormData) => {
-      return await apiClient.post('/users', { ...data, role: 'teacher' });
+    mutationFn: async (data: TeacherFormData) => {
+      const { isEditing, ...submitData } = data;
+      return await apiClient.post('/users', { ...submitData, role: 'teacher' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users', 'teacher'] });
@@ -99,8 +116,9 @@ export default function Teachers() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateTeacherFormData }) => {
-      return await apiClient.put(`/users/${id}`, data);
+    mutationFn: async ({ id, data }: { id: string; data: TeacherFormData }) => {
+      const { isEditing, email, password, ...submitData } = data;
+      return await apiClient.put(`/users/${id}`, submitData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users', 'teacher'] });
@@ -141,12 +159,9 @@ export default function Teachers() {
     },
   });
 
-  const onSubmit = (data: CreateTeacherFormData) => {
+  const onSubmit = (data: TeacherFormData) => {
     if (editingTeacher) {
-      const updateData = { ...data };
-      delete (updateData as any).email;
-      delete (updateData as any).password;
-      updateMutation.mutate({ id: editingTeacher.id, data: updateData as UpdateTeacherFormData });
+      updateMutation.mutate({ id: editingTeacher.id, data });
     } else {
       createMutation.mutate(data);
     }
@@ -164,6 +179,7 @@ export default function Teachers() {
       dateOfBirth: teacher.dateOfBirth || '',
       gender: (teacher.gender as any) || 'male',
       bloodGroup: teacher.bloodGroup || '',
+      isEditing: true,
     });
     setIsDialogOpen(true);
   };
@@ -185,7 +201,18 @@ export default function Teachers() {
     setIsDialogOpen(open);
     if (!open) {
       setEditingTeacher(null);
-      form.reset();
+      form.reset({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        phone: '',
+        address: '',
+        dateOfBirth: '',
+        gender: 'male',
+        bloodGroup: '',
+        isEditing: false,
+      });
     }
   };
 
@@ -233,6 +260,7 @@ export default function Teachers() {
               <DialogDescription>Enter teacher details</DialogDescription>
             </DialogHeader>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <input type="hidden" {...form.register('isEditing')} />
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name *</Label>
