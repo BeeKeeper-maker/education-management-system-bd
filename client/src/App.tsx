@@ -25,6 +25,12 @@ import RoomAllocation from './pages/RoomAllocation';
 import BookManagement from './pages/BookManagement';
 import IssueReturn from './pages/IssueReturn';
 import NoticeBoard from './pages/NoticeBoard';
+import Teachers from './pages/Teachers';
+import Classes from './pages/Classes';
+import Institution from './pages/Institution';
+import Notifications from './pages/Notifications';
+import Settings from './pages/Settings';
+import FeeStructures from './pages/FeeStructures';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -249,19 +255,31 @@ function AppRoutes() {
               />
             </Route>
          <Route path="/teachers">
-        <ProtectedRoute component={() => <div>Teachers Page (Coming Soon)</div>} />
+        <ProtectedRoute component={Teachers} allowedRoles={['superadmin', 'admin']} />
       </Route>
 
       <Route path="/classes">
-        <ProtectedRoute component={() => <div>Classes Page (Coming Soon)</div>} />
+        <ProtectedRoute component={Classes} allowedRoles={['superadmin', 'admin', 'teacher']} />
+      </Route>
+
+      <Route path="/institution">
+        <ProtectedRoute component={Institution} allowedRoles={['superadmin', 'admin']} />
       </Route>
 
       <Route path="/notifications">
-        <ProtectedRoute component={() => <div>Notifications Page (Coming Soon)</div>} />
+        <ProtectedRoute component={Notifications} />
       </Route>
 
       <Route path="/settings">
-        <ProtectedRoute component={() => <div>Settings Page (Coming Soon)</div>} />
+        <ProtectedRoute component={Settings} />
+      </Route>
+
+      <Route path="/fees/structures">
+        <ProtectedRoute component={FeeStructures} allowedRoles={['superadmin', 'admin', 'accountant']} />
+      </Route>
+
+      <Route path="/assignments">
+        <ProtectedRoute component={() => <div className="container mx-auto p-6"><h1 className="text-3xl font-bold">Assignments</h1><p className="text-muted-foreground mt-2">Coming Soon</p></div>} />
       </Route>
 
       <Route path="/">

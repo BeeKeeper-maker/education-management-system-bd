@@ -60,6 +60,22 @@ export const notifications = pgTable('notifications', {
 });
 
 /**
+ * Messages Table
+ * Direct messages between users
+ */
+export const messages = pgTable('messages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  senderId: uuid('sender_id').references(() => users.id).notNull(),
+  receiverId: uuid('receiver_id').references(() => users.id).notNull(),
+  subject: varchar('subject', { length: 255 }),
+  content: text('content').notNull(),
+  isRead: boolean('is_read').default(false).notNull(),
+  parentMessageId: uuid('parent_message_id').references((): any => messages.id), // For threading
+  attachmentUrl: text('attachment_url'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+/**
  * SMS Logs Table
  * Track all SMS sent through the system
  */
@@ -105,3 +121,6 @@ export type NewNotification = typeof notifications.$inferInsert;
 
 export type SmsLog = typeof smsLogs.$inferSelect;
 export type NewSmsLog = typeof smsLogs.$inferInsert;
+
+export type Message = typeof messages.$inferSelect;
+export type NewMessage = typeof messages.$inferInsert;

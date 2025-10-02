@@ -1,0 +1,29 @@
+Excellent work setting up the project! The application is running, the database is seeded, and we can see the login page. This is a perfect starting point.
+
+Now, our critical mission is to perform a **"Great Refactor and Polish"**. The goal is to fix all underlying issues from the original codebase and make the entire EduPro application stable, fully functional, and production-ready.
+
+Please perform the following tasks systematically:
+
+**1. Login and Test Core Navigation:**
+*   **Objective:** Verify that the core functionalities are working and identify broken parts.
+*   **Action:**
+    *   Using the "Demo Credentials" visible on the login page, please attempt to log in as a **"SuperAdmin"** (superadmin@edupro.com / Password@123).
+    *   After successfully logging in, systematically click on **every single link** in the sidebar navigation menu.
+    *   Create a list of all the pages that either **fail to load, show an error, or appear broken/empty**.
+
+**2. Deep Dive and Fix Broken Pages:**
+*   **Objective:** Make every page and feature fully functional.
+*   **Action:**
+    *   For each broken page you identified in the previous step, perform a deep dive into its source code (e.g., `BookManagement.tsx`, `FinancialDashboard.tsx`, etc.).
+    *   Analyze the code to find the root cause of the problem. Common issues might be: incorrect API calls, problems with rendering data, or syntax errors.
+    *   Fix the code to ensure the page loads correctly and displays data as intended.
+
+**3. Database Schema Integrity Check:**
+*   **Objective:** Find and eliminate any duplicate or conflicting database schemas that might cause issues later.
+*   **Action:**
+    *   Thoroughly review all files in `server/src/db/schema`.
+    *   Check for any tables that might be defined in multiple files (e.g., `announcements`, `notifications`).
+    *   Consolidate them into a single, correct definition and ensure the main `index.ts` in the schema folder exports everything without conflicts.
+
+**Final Instruction:**
+Your primary goal is **100% functionality**. After this session, logging in as an admin and clicking any link in the sidebar should lead to a working, error-free page. Let's restore this project to its full potential and make it bulletproof.
