@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,149 +9,113 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { User, Lock, Save } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const updateProfileSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+  confirmPassword: z.string().min(8, 'Confirm password is required'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
+type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
 export default function Settings() {
   const { user } = useAuth();
   const { toast } = useToast();
-  
-  const [isSaving, setIsSaving] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const queryClient = useQueryClient();
 
-  const [profileForm, setProfileForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
+  const profileForm = useForm<UpdateProfileFormData>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: {
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      phone: user?.phone || '',
+      address: user?.address || '',
+    },
   });
 
-  const [passwordForm, setPasswordForm] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+  const passwordForm = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(changePasswordSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
   });
 
   useEffect(() => {
     if (user) {
-      setProfileForm({
+      profileForm.reset({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
-        email: user.email || '',
         phone: user.phone || '',
         address: user.address || '',
       });
     }
-  }, [user]);
+  }, [user, profileForm]);
 
-  const handleSaveProfile = async () => {
-    if (!profileForm.firstName || !profileForm.lastName) {
-      toast({
-        title: 'Validation Error',
-        description: 'First name and last name are required',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSaving(true);
-    try {
-      const response = await fetch(`/api/users/${user?.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(profileForm),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to update profile');
-      }
-
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: UpdateProfileFormData) => {
+      return await apiClient.put(`/users/${user?.id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
       toast({
         title: 'Success',
         description: 'Profile updated successfully',
       });
-    } catch (error: any) {
-      console.error('Save profile error:', error);
+    },
+    onError: (error: any) => {
       toast({
         title: 'Error',
-        description: error.message || 'Failed to update profile',
+        description: error.response?.data?.error || 'Failed to update profile',
         variant: 'destructive',
       });
-    } finally {
-      setIsSaving(false);
-    }
-  };
+    },
+  });
 
-  const handleChangePassword = async () => {
-    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      toast({
-        title: 'Validation Error',
-        description: 'All password fields are required',
-        variant: 'destructive',
+  const changePasswordMutation = useMutation({
+    mutationFn: async (data: ChangePasswordFormData) => {
+      return await apiClient.post('/auth/change-password', {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
       });
-      return;
-    }
-
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast({
-        title: 'Validation Error',
-        description: 'New passwords do not match',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    if (passwordForm.newPassword.length < 8) {
-      toast({
-        title: 'Validation Error',
-        description: 'Password must be at least 8 characters',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsChangingPassword(true);
-    try {
-      const response = await fetch('/api/auth/change-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          currentPassword: passwordForm.currentPassword,
-          newPassword: passwordForm.newPassword,
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to change password');
-      }
-
+    },
+    onSuccess: () => {
       toast({
         title: 'Success',
         description: 'Password changed successfully',
       });
-
-      setPasswordForm({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-    } catch (error: any) {
-      console.error('Change password error:', error);
+      passwordForm.reset();
+    },
+    onError: (error: any) => {
       toast({
         title: 'Error',
-        description: error.message || 'Failed to change password',
+        description: error.response?.data?.error || 'Failed to change password',
         variant: 'destructive',
       });
-    } finally {
-      setIsChangingPassword(false);
-    }
+    },
+  });
+
+  const onProfileSubmit = (data: UpdateProfileFormData) => {
+    updateProfileMutation.mutate(data);
+  };
+
+  const onPasswordSubmit = (data: ChangePasswordFormData) => {
+    changePasswordMutation.mutate(data);
   };
 
   return (
@@ -178,67 +144,75 @@ export default function Settings() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    data-testid="input-firstName"
-                    value={profileForm.firstName}
-                    onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
-                  />
+            <CardContent>
+              <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input
+                      id="firstName"
+                      data-testid="input-firstName"
+                      {...profileForm.register('firstName')}
+                    />
+                    {profileForm.formState.errors.firstName && (
+                      <p className="text-sm text-red-600">{profileForm.formState.errors.firstName.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input
+                      id="lastName"
+                      data-testid="input-lastName"
+                      {...profileForm.register('lastName')}
+                    />
+                    {profileForm.formState.errors.lastName && (
+                      <p className="text-sm text-red-600">{profileForm.formState.errors.lastName.message}</p>
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    data-testid="input-lastName"
-                    value={profileForm.lastName}
-                    onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    data-testid="input-email"
-                    value={profileForm.email}
-                    disabled
-                  />
-                  <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      data-testid="input-email"
+                      value={user?.email || ''}
+                      disabled
+                    />
+                    <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input
+                      id="phone"
+                      data-testid="input-phone"
+                      {...profileForm.register('phone')}
+                    />
+                  </div>
                 </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="address">Address</Label>
                   <Input
-                    id="phone"
-                    data-testid="input-phone"
-                    value={profileForm.phone}
-                    onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                    id="address"
+                    data-testid="input-address"
+                    {...profileForm.register('address')}
                   />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="address">Address</Label>
-                <Input
-                  id="address"
-                  data-testid="input-address"
-                  value={profileForm.address}
-                  onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
-                />
-              </div>
-
-              <div className="pt-4">
-                <Button onClick={handleSaveProfile} disabled={isSaving} data-testid="button-save-profile">
-                  <Save className="h-4 w-4 mr-2" />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
-                </Button>
-              </div>
+                <div className="pt-4">
+                  <Button
+                    type="submit"
+                    disabled={updateProfileMutation.isPending}
+                    data-testid="button-save-profile"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
         </TabsContent>
@@ -256,47 +230,59 @@ export default function Settings() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password *</Label>
-                <Input
-                  id="currentPassword"
-                  type="password"
-                  data-testid="input-currentPassword"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                />
-              </div>
+            <CardContent>
+              <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Current Password *</Label>
+                  <Input
+                    id="currentPassword"
+                    type="password"
+                    data-testid="input-currentPassword"
+                    {...passwordForm.register('currentPassword')}
+                  />
+                  {passwordForm.formState.errors.currentPassword && (
+                    <p className="text-sm text-red-600">{passwordForm.formState.errors.currentPassword.message}</p>
+                  )}
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password *</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  data-testid="input-newPassword"
-                  value={passwordForm.newPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                />
-                <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password *</Label>
+                  <Input
+                    id="newPassword"
+                    type="password"
+                    data-testid="input-newPassword"
+                    {...passwordForm.register('newPassword')}
+                  />
+                  {passwordForm.formState.errors.newPassword && (
+                    <p className="text-sm text-red-600">{passwordForm.formState.errors.newPassword.message}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password *</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  data-testid="input-confirmPassword"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                />
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password *</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    data-testid="input-confirmPassword"
+                    {...passwordForm.register('confirmPassword')}
+                  />
+                  {passwordForm.formState.errors.confirmPassword && (
+                    <p className="text-sm text-red-600">{passwordForm.formState.errors.confirmPassword.message}</p>
+                  )}
+                </div>
 
-              <div className="pt-4">
-                <Button onClick={handleChangePassword} disabled={isChangingPassword} data-testid="button-change-password">
-                  <Lock className="h-4 w-4 mr-2" />
-                  {isChangingPassword ? 'Changing...' : 'Change Password'}
-                </Button>
-              </div>
+                <div className="pt-4">
+                  <Button
+                    type="submit"
+                    disabled={changePasswordMutation.isPending}
+                    data-testid="button-change-password"
+                  >
+                    <Lock className="h-4 w-4 mr-2" />
+                    {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
         </TabsContent>

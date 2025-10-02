@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,116 +19,78 @@ interface Notification {
 }
 
 export default function Notifications() {
-  const { user } = useAuth();
   const { toast } = useToast();
-  
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    loadNotifications();
-  }, []);
+  const { data: notificationsData, isLoading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const response = await apiClient.get('/notifications');
+      return response.data;
+    },
+  });
 
-  const loadNotifications = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/notifications', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  const markAsReadMutation = useMutation({
+    mutationFn: async (notificationId: string) => {
+      return await apiClient.post(`/notifications/${notificationId}/read`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      toast({
+        title: 'Success',
+        description: 'Notification marked as read',
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setNotifications(data.notifications || []);
-      } else {
-        setNotifications([
-          {
-            id: '1',
-            title: 'Welcome to EduPro',
-            message: 'Thank you for using EduPro Education Management System',
-            type: 'general',
-            isRead: false,
-            createdAt: new Date().toISOString(),
-          },
-          {
-            id: '2',
-            title: 'System Update',
-            message: 'The system has been updated with new features',
-            type: 'announcement',
-            isRead: false,
-            createdAt: new Date(Date.now() - 3600000).toISOString(),
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error('Load notifications error:', error);
-      setNotifications([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleMarkAsRead = async (notificationId: string) => {
-    try {
-      const response = await fetch(`/api/notifications/${notificationId}/read`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to mark notification as read',
+        variant: 'destructive',
       });
+    },
+  });
 
-      if (response.ok || response.status === 404) {
-        setNotifications(notifications.map(n => 
-          n.id === notificationId ? { ...n, isRead: true } : n
-        ));
-        
-        toast({
-          title: 'Success',
-          description: 'Notification marked as read',
-        });
-      }
-    } catch (error) {
-      console.error('Mark as read error:', error);
-    }
-  };
-
-  const handleMarkAllAsRead = async () => {
-    try {
-      const response = await fetch('/api/notifications/read-all', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  const markAllAsReadMutation = useMutation({
+    mutationFn: async () => {
+      return await apiClient.post('/notifications/read-all');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      toast({
+        title: 'Success',
+        description: 'All notifications marked as read',
       });
-
-      if (response.ok || response.status === 404) {
-        setNotifications(notifications.map(n => ({ ...n, isRead: true })));
-        
-        toast({
-          title: 'Success',
-          description: 'All notifications marked as read',
-        });
-      }
-    } catch (error) {
-      console.error('Mark all as read error:', error);
-    }
-  };
-
-  const handleDelete = async (notificationId: string) => {
-    try {
-      const response = await fetch(`/api/notifications/${notificationId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to mark all notifications as read',
+        variant: 'destructive',
       });
+    },
+  });
 
-      if (response.ok || response.status === 404) {
-        setNotifications(notifications.filter(n => n.id !== notificationId));
-        
-        toast({
-          title: 'Success',
-          description: 'Notification deleted',
-        });
-      }
-    } catch (error) {
-      console.error('Delete notification error:', error);
-    }
-  };
+  const deleteMutation = useMutation({
+    mutationFn: async (notificationId: string) => {
+      return await apiClient.delete(`/notifications/${notificationId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      toast({
+        title: 'Success',
+        description: 'Notification deleted',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to delete notification',
+        variant: 'destructive',
+      });
+    },
+  });
 
+  const notifications: Notification[] = notificationsData?.notifications || [];
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   if (isLoading) {
@@ -148,12 +111,17 @@ export default function Notifications() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold" data-testid="page-title">Notifications</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground" data-testid="unread-count">
             {unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}` : 'All caught up!'}
           </p>
         </div>
         {unreadCount > 0 && (
-          <Button onClick={handleMarkAllAsRead} variant="outline" data-testid="button-mark-all-read">
+          <Button
+            onClick={() => markAllAsReadMutation.mutate()}
+            variant="outline"
+            disabled={markAllAsReadMutation.isPending}
+            data-testid="button-mark-all-read"
+          >
             <CheckCheck className="h-4 w-4 mr-2" />
             Mark All as Read
           </Button>
@@ -164,7 +132,7 @@ export default function Notifications() {
         {notifications.length === 0 ? (
           <Card>
             <CardContent className="pt-6">
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-muted-foreground" data-testid="empty-notifications">
                 <Bell className="h-16 w-16 mx-auto mb-4 opacity-50" />
                 <p className="font-medium">No notifications</p>
                 <p className="text-sm">You're all caught up!</p>
@@ -182,12 +150,12 @@ export default function Notifications() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <CardTitle className="text-base">{notification.title}</CardTitle>
+                      <CardTitle className="text-base" data-testid={`notification-title-${notification.id}`}>{notification.title}</CardTitle>
                       {!notification.isRead && (
-                        <Badge variant="default" className="text-xs">New</Badge>
+                        <Badge variant="default" className="text-xs" data-testid={`notification-badge-${notification.id}`}>New</Badge>
                       )}
                     </div>
-                    <CardDescription>
+                    <CardDescription data-testid={`notification-time-${notification.id}`}>
                       {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                     </CardDescription>
                   </div>
@@ -196,7 +164,8 @@ export default function Notifications() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleMarkAsRead(notification.id)}
+                        onClick={() => markAsReadMutation.mutate(notification.id)}
+                        disabled={markAsReadMutation.isPending}
                         data-testid={`button-mark-read-${notification.id}`}
                       >
                         <Check className="h-4 w-4" />
@@ -205,7 +174,8 @@ export default function Notifications() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDelete(notification.id)}
+                      onClick={() => deleteMutation.mutate(notification.id)}
+                      disabled={deleteMutation.isPending}
                       data-testid={`button-delete-${notification.id}`}
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
@@ -214,9 +184,9 @@ export default function Notifications() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">{notification.message}</p>
+                <p className="text-sm" data-testid={`notification-message-${notification.id}`}>{notification.message}</p>
                 {notification.actionUrl && (
-                  <Button variant="link" className="px-0 mt-2" asChild>
+                  <Button variant="link" className="px-0 mt-2" asChild data-testid={`notification-action-${notification.id}`}>
                     <a href={notification.actionUrl}>View Details</a>
                   </Button>
                 )}

@@ -1,12 +1,34 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Search, GraduationCap, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, GraduationCap, Users, AlertTriangle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const createTeacherSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  dateOfBirth: z.string().optional(),
+  gender: z.enum(['male', 'female', 'other']).optional(),
+  bloodGroup: z.string().optional(),
+});
+
+const updateTeacherSchema = createTeacherSchema.omit({ email: true, password: true });
+
+type CreateTeacherFormData = z.infer<typeof createTeacherSchema>;
+type UpdateTeacherFormData = z.infer<typeof updateTeacherSchema>;
 
 interface Teacher {
   id: string;
@@ -23,160 +45,17 @@ interface Teacher {
 
 export default function Teachers() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [teacherToDelete, setTeacherToDelete] = useState<Teacher | null>(null);
 
-  const [teacherForm, setTeacherForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: '',
-    dateOfBirth: '',
-    gender: 'male',
-    bloodGroup: '',
-  });
-
-  useEffect(() => {
-    loadTeachers();
-  }, []);
-
-  const loadTeachers = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/users?role=teacher', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-
-      if (!response.ok) throw new Error('Failed to load teachers');
-
-      const data = await response.json();
-      setTeachers(data.users || []);
-    } catch (error) {
-      console.error('Load teachers error:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load teachers',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSaveTeacher = async () => {
-    if (!teacherForm.firstName || !teacherForm.lastName || !teacherForm.email || (!editingTeacher && !teacherForm.password)) {
-      toast({
-        title: 'Validation Error',
-        description: 'Please fill in all required fields',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const url = editingTeacher ? `/api/users/${editingTeacher.id}` : '/api/users';
-      const method = editingTeacher ? 'PUT' : 'POST';
-
-      const payload: any = {
-        ...teacherForm,
-        role: 'teacher',
-      };
-
-      if (editingTeacher) {
-        delete payload.password;
-        delete payload.email;
-      }
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to save teacher');
-      }
-
-      toast({
-        title: 'Success',
-        description: `Teacher ${editingTeacher ? 'updated' : 'added'} successfully`,
-      });
-
-      setIsDialogOpen(false);
-      resetForm();
-      loadTeachers();
-    } catch (error: any) {
-      console.error('Save teacher error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to save teacher',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDeleteTeacher = async (teacherId: string) => {
-    if (!confirm('Are you sure you want to delete this teacher?')) return;
-
-    try {
-      const response = await fetch(`/api/users/${teacherId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to delete teacher');
-      }
-
-      toast({
-        title: 'Success',
-        description: 'Teacher deleted successfully',
-      });
-
-      loadTeachers();
-    } catch (error: any) {
-      console.error('Delete teacher error:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to delete teacher',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  const openEditTeacher = (teacher: Teacher) => {
-    setEditingTeacher(teacher);
-    setTeacherForm({
-      firstName: teacher.firstName,
-      lastName: teacher.lastName,
-      email: teacher.email,
-      password: '',
-      phone: teacher.phone || '',
-      address: teacher.address || '',
-      dateOfBirth: teacher.dateOfBirth || '',
-      gender: teacher.gender || 'male',
-      bloodGroup: teacher.bloodGroup || '',
-    });
-    setIsDialogOpen(true);
-  };
-
-  const resetForm = () => {
-    setTeacherForm({
+  const form = useForm<CreateTeacherFormData>({
+    resolver: zodResolver(editingTeacher ? updateTeacherSchema : createTeacherSchema),
+    defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
@@ -186,10 +65,131 @@ export default function Teachers() {
       dateOfBirth: '',
       gender: 'male',
       bloodGroup: '',
-    });
-    setEditingTeacher(null);
+    },
+  });
+
+  const { data: teachersData, isLoading } = useQuery({
+    queryKey: ['users', 'teacher'],
+    queryFn: async () => {
+      const response = await apiClient.get('/users', { role: 'teacher' });
+      return response.data;
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async (data: CreateTeacherFormData) => {
+      return await apiClient.post('/users', { ...data, role: 'teacher' });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users', 'teacher'] });
+      toast({
+        title: 'Success',
+        description: 'Teacher added successfully',
+      });
+      setIsDialogOpen(false);
+      form.reset();
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to add teacher',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: UpdateTeacherFormData }) => {
+      return await apiClient.put(`/users/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users', 'teacher'] });
+      toast({
+        title: 'Success',
+        description: 'Teacher updated successfully',
+      });
+      setIsDialogOpen(false);
+      setEditingTeacher(null);
+      form.reset();
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to update teacher',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiClient.delete(`/users/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users', 'teacher'] });
+      toast({
+        title: 'Success',
+        description: 'Teacher deleted successfully',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.error || 'Failed to delete teacher',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const onSubmit = (data: CreateTeacherFormData) => {
+    if (editingTeacher) {
+      const updateData = { ...data };
+      delete (updateData as any).email;
+      delete (updateData as any).password;
+      updateMutation.mutate({ id: editingTeacher.id, data: updateData as UpdateTeacherFormData });
+    } else {
+      createMutation.mutate(data);
+    }
   };
 
+  const handleEdit = (teacher: Teacher) => {
+    setEditingTeacher(teacher);
+    form.reset({
+      firstName: teacher.firstName,
+      lastName: teacher.lastName,
+      email: teacher.email,
+      password: '',
+      phone: teacher.phone || '',
+      address: teacher.address || '',
+      dateOfBirth: teacher.dateOfBirth || '',
+      gender: (teacher.gender as any) || 'male',
+      bloodGroup: teacher.bloodGroup || '',
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (teacher: Teacher) => {
+    setTeacherToDelete(teacher);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (teacherToDelete) {
+      deleteMutation.mutate(teacherToDelete.id);
+      setDeleteDialogOpen(false);
+      setTeacherToDelete(null);
+    }
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    setIsDialogOpen(open);
+    if (!open) {
+      setEditingTeacher(null);
+      form.reset();
+    }
+  };
+
+  const teachers: Teacher[] = teachersData?.users || [];
   const filteredTeachers = teachers.filter((teacher) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
@@ -220,37 +220,41 @@ export default function Teachers() {
           <h1 className="text-3xl font-bold" data-testid="page-title">Teachers Management</h1>
           <p className="text-muted-foreground">Manage teaching staff</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
           <DialogTrigger asChild>
-            <Button onClick={resetForm} data-testid="button-add-teacher">
+            <Button data-testid="button-add-teacher">
               <Plus className="h-4 w-4 mr-2" />
               Add Teacher
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl" data-testid="dialog-teacher-form">
             <DialogHeader>
-              <DialogTitle>{editingTeacher ? 'Edit' : 'Add'} Teacher</DialogTitle>
+              <DialogTitle data-testid="dialog-title">{editingTeacher ? 'Edit' : 'Add'} Teacher</DialogTitle>
               <DialogDescription>Enter teacher details</DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name *</Label>
                   <Input
                     id="firstName"
                     data-testid="input-firstName"
-                    value={teacherForm.firstName}
-                    onChange={(e) => setTeacherForm({ ...teacherForm, firstName: e.target.value })}
+                    {...form.register('firstName')}
                   />
+                  {form.formState.errors.firstName && (
+                    <p className="text-sm text-red-600">{form.formState.errors.firstName.message}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name *</Label>
                   <Input
                     id="lastName"
                     data-testid="input-lastName"
-                    value={teacherForm.lastName}
-                    onChange={(e) => setTeacherForm({ ...teacherForm, lastName: e.target.value })}
+                    {...form.register('lastName')}
                   />
+                  {form.formState.errors.lastName && (
+                    <p className="text-sm text-red-600">{form.formState.errors.lastName.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -261,10 +265,12 @@ export default function Teachers() {
                     id="email"
                     type="email"
                     data-testid="input-email"
-                    value={teacherForm.email}
-                    onChange={(e) => setTeacherForm({ ...teacherForm, email: e.target.value })}
+                    {...form.register('email')}
                     disabled={!!editingTeacher}
                   />
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+                  )}
                 </div>
                 {!editingTeacher && (
                   <div className="space-y-2">
@@ -273,9 +279,11 @@ export default function Teachers() {
                       id="password"
                       type="password"
                       data-testid="input-password"
-                      value={teacherForm.password}
-                      onChange={(e) => setTeacherForm({ ...teacherForm, password: e.target.value })}
+                      {...form.register('password')}
                     />
+                    {form.formState.errors.password && (
+                      <p className="text-sm text-red-600">{form.formState.errors.password.message}</p>
+                    )}
                   </div>
                 )}
                 <div className="space-y-2">
@@ -283,29 +291,36 @@ export default function Teachers() {
                   <Input
                     id="phone"
                     data-testid="input-phone"
-                    value={teacherForm.phone}
-                    onChange={(e) => setTeacherForm({ ...teacherForm, phone: e.target.value })}
+                    {...form.register('phone')}
                   />
                 </div>
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button onClick={handleSaveTeacher} disabled={isSubmitting} className="flex-1" data-testid="button-submit">
-                  {isSubmitting ? 'Saving...' : editingTeacher ? 'Update' : 'Add'} Teacher
+                <Button
+                  type="submit"
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                  className="flex-1"
+                  data-testid="button-submit"
+                >
+                  {createMutation.isPending || updateMutation.isPending
+                    ? 'Saving...'
+                    : editingTeacher
+                    ? 'Update'
+                    : 'Add'}{' '}
+                  Teacher
                 </Button>
                 <Button
+                  type="button"
                   variant="outline"
-                  onClick={() => {
-                    setIsDialogOpen(false);
-                    resetForm();
-                  }}
-                  disabled={isSubmitting}
+                  onClick={() => handleDialogClose(false)}
+                  disabled={createMutation.isPending || updateMutation.isPending}
                   data-testid="button-cancel"
                 >
                   Cancel
                 </Button>
               </div>
-            </div>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
@@ -382,25 +397,26 @@ export default function Teachers() {
                 <tbody>
                   {filteredTeachers.map((teacher) => (
                     <tr key={teacher.id} className="border-b hover:bg-muted/50" data-testid={`teacher-row-${teacher.id}`}>
-                      <td className="p-2 font-medium">
+                      <td className="p-2 font-medium" data-testid={`teacher-name-${teacher.id}`}>
                         {teacher.firstName} {teacher.lastName}
                       </td>
-                      <td className="p-2">{teacher.email}</td>
-                      <td className="p-2">{teacher.phone || '-'}</td>
+                      <td className="p-2" data-testid={`teacher-email-${teacher.id}`}>{teacher.email}</td>
+                      <td className="p-2" data-testid={`teacher-phone-${teacher.id}`}>{teacher.phone || '-'}</td>
                       <td className="text-center p-2">
-                        <Badge variant={teacher.isActive ? 'default' : 'destructive'}>
+                        <Badge variant={teacher.isActive ? 'default' : 'destructive'} data-testid={`teacher-status-${teacher.id}`}>
                           {teacher.isActive ? 'Active' : 'Inactive'}
                         </Badge>
                       </td>
                       <td className="text-center p-2">
                         <div className="flex items-center justify-center gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => openEditTeacher(teacher)} data-testid={`button-edit-${teacher.id}`}>
+                          <Button variant="ghost" size="sm" onClick={() => handleEdit(teacher)} data-testid={`button-edit-${teacher.id}`}>
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDeleteTeacher(teacher.id)}
+                            onClick={() => handleDelete(teacher)}
+                            disabled={deleteMutation.isPending}
                             data-testid={`button-delete-${teacher.id}`}
                           >
                             <Trash2 className="h-4 w-4 text-red-600" />
@@ -415,6 +431,42 @@ export default function Teachers() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent data-testid="dialog-delete-confirm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+              Confirm Deletion
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete{' '}
+              <span className="font-semibold">
+                {teacherToDelete?.firstName} {teacherToDelete?.lastName}
+              </span>
+              ? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={deleteMutation.isPending}
+              data-testid="button-cancel-delete"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={deleteMutation.isPending}
+              data-testid="button-confirm-delete"
+            >
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

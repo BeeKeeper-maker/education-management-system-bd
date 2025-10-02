@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -28,51 +30,46 @@ interface Subject {
 
 export default function Classes() {
   const { toast } = useToast();
-  
-  const [classes, setClasses] = useState<Class[]>([]);
-  const [sections, setSections] = useState<Section[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const { data: classesData, isLoading: classesLoading, error: classesError } = useQuery({
+    queryKey: ['academic', 'classes'],
+    queryFn: async () => {
+      const response = await apiClient.get('/academic/classes');
+      return response.data;
+    },
+  });
+
+  const { data: sectionsData, isLoading: sectionsLoading, error: sectionsError } = useQuery({
+    queryKey: ['academic', 'sections'],
+    queryFn: async () => {
+      const response = await apiClient.get('/academic/sections');
+      return response.data;
+    },
+  });
+
+  const { data: subjectsData, isLoading: subjectsLoading, error: subjectsError } = useQuery({
+    queryKey: ['academic', 'subjects'],
+    queryFn: async () => {
+      const response = await apiClient.get('/academic/subjects');
+      return response.data;
+    },
+  });
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      const [classesRes, sectionsRes, subjectsRes] = await Promise.all([
-        fetch('/api/academic/classes', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }),
-        fetch('/api/academic/sections', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }),
-        fetch('/api/academic/subjects', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }),
-      ]);
-
-      if (!classesRes.ok) throw new Error('Failed to load classes');
-
-      const classesData = await classesRes.json();
-      const sectionsData = sectionsRes.ok ? await sectionsRes.json() : { sections: [] };
-      const subjectsData = subjectsRes.ok ? await subjectsRes.json() : { subjects: [] };
-
-      setClasses(classesData.classes || []);
-      setSections(sectionsData.sections || []);
-      setSubjects(subjectsData.subjects || []);
-    } catch (error) {
-      console.error('Load data error:', error);
+    if (classesError || sectionsError || subjectsError) {
       toast({
         title: 'Error',
         description: 'Failed to load academic data',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [classesError, sectionsError, subjectsError, toast]);
+
+  const classes: Class[] = classesData?.classes || [];
+  const sections: Section[] = sectionsData?.sections || [];
+  const subjects: Subject[] = subjectsData?.subjects || [];
+
+  const isLoading = classesLoading || sectionsLoading || subjectsLoading;
 
   if (isLoading) {
     return (
@@ -134,7 +131,7 @@ export default function Classes() {
           </CardHeader>
           <CardContent>
             {classes.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-muted-foreground" data-testid="empty-classes">
                 <BookOpen className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>No classes found</p>
               </div>
@@ -147,10 +144,10 @@ export default function Classes() {
                     data-testid={`class-${cls.id}`}
                   >
                     <div>
-                      <p className="font-semibold">{cls.name}</p>
-                      <p className="text-sm text-muted-foreground">{cls.level}</p>
+                      <p className="font-semibold" data-testid={`class-name-${cls.id}`}>{cls.name}</p>
+                      <p className="text-sm text-muted-foreground" data-testid={`class-level-${cls.id}`}>{cls.level}</p>
                     </div>
-                    <Badge variant="outline">
+                    <Badge variant="outline" data-testid={`class-sections-count-${cls.id}`}>
                       {sections.filter(s => s.classId === cls.id).length} sections
                     </Badge>
                   </div>
@@ -167,7 +164,7 @@ export default function Classes() {
           </CardHeader>
           <CardContent>
             {subjects.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-muted-foreground" data-testid="empty-subjects">
                 <GraduationCap className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>No subjects found</p>
               </div>
@@ -180,12 +177,12 @@ export default function Classes() {
                     data-testid={`subject-${subject.id}`}
                   >
                     <div>
-                      <p className="font-semibold">{subject.name}</p>
+                      <p className="font-semibold" data-testid={`subject-name-${subject.id}`}>{subject.name}</p>
                       {subject.description && (
-                        <p className="text-sm text-muted-foreground">{subject.description}</p>
+                        <p className="text-sm text-muted-foreground" data-testid={`subject-description-${subject.id}`}>{subject.description}</p>
                       )}
                     </div>
-                    <Badge variant="secondary">{subject.code}</Badge>
+                    <Badge variant="secondary" data-testid={`subject-code-${subject.id}`}>{subject.code}</Badge>
                   </div>
                 ))}
               </div>
@@ -201,7 +198,7 @@ export default function Classes() {
         </CardHeader>
         <CardContent>
           {sections.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-8 text-muted-foreground" data-testid="empty-sections">
               <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>No sections found</p>
             </div>
@@ -219,10 +216,10 @@ export default function Classes() {
                   {sections.map((section) => {
                     const sectionClass = classes.find(c => c.id === section.classId);
                     return (
-                      <tr key={section.id} className="border-b hover:bg-muted/50" data-testid={`section-${section.id}`}>
-                        <td className="p-2 font-medium">{section.name}</td>
-                        <td className="p-2">{sectionClass?.name || 'Unknown'}</td>
-                        <td className="text-center p-2">{section.capacity || '-'}</td>
+                      <tr key={section.id} className="border-b hover:bg-muted/50" data-testid={`section-row-${section.id}`}>
+                        <td className="p-2 font-medium" data-testid={`section-name-${section.id}`}>{section.name}</td>
+                        <td className="p-2" data-testid={`section-class-${section.id}`}>{sectionClass?.name || 'Unknown'}</td>
+                        <td className="text-center p-2" data-testid={`section-capacity-${section.id}`}>{section.capacity || '-'}</td>
                       </tr>
                     );
                   })}
